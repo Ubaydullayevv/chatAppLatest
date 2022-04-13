@@ -28,7 +28,7 @@ public interface ChannelRepository extends JpaRepository<Group, Long> {
     value = "select cast(gm.id as varchar) as postId,\n" +
             "       gm.text as postText,\n" +
             "       gm.created_at as postTime,\n" +
-            "       gm.is_edit,\n" +
+            "       gm.updated_at as ,\n" +
             "       gm.view_count\n" +
             "from group_message gm")
 
