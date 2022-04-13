@@ -1,6 +1,8 @@
 package com.example.our_chat_app.Controller;
 
 import com.example.our_chat_app.dto.ChannelDto;
+import com.example.our_chat_app.dto.GroupMessageDto;
+import com.example.our_chat_app.dto.MessageDto;
 import com.example.our_chat_app.payload.ApiResponse;
 import com.example.our_chat_app.projection.ChannelProjection;
 import com.example.our_chat_app.projection.PostProjection;
@@ -41,6 +43,13 @@ public class ChannelController {
     public HttpEntity<?> createChannel(@Valid @RequestBody ChannelDto channelDto) {
         Long userid = 1000009L;
         return channelService.createChannel(userid,channelDto);
+    }
+
+
+    @PostMapping("/writePost")
+    public HttpEntity<?> writePost(@Valid @RequestBody GroupMessageDto groupMessageDto) {
+        Long userid = 1000009L;
+        return channelService.writePost(userid, groupMessageDto);
     }
 
 
