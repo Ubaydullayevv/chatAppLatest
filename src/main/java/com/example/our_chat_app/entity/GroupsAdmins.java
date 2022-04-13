@@ -38,5 +38,8 @@ public class GroupsAdmins {
     @OneToMany(mappedBy = "groupsAdmins")
     List<GroupsAdminsPermissions> adminsPermissions = new ArrayList<>();
 
-
+    public GroupsAdmins(User admin, Group group) {
+        this.admin = admin;
+        this.group = group;
+    }
 }

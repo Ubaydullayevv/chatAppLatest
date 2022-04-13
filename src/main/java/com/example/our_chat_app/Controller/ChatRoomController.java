@@ -41,8 +41,9 @@ public class ChatRoomController {
         return chatRoomService.sendMessageRoom(userId,messageDto);
     }
 
-    @GetMapping("/chats/{userId}")
-    public HttpEntity<?> showAllChatsByUserId(@PathVariable Long userId){
+    @GetMapping("/chats/")
+    public HttpEntity<?> showAllChatsByUserId(){
+        Long userId=1000009L;
         return chatRoomService.getAllUserChatsByUserId(userId);
     }
 

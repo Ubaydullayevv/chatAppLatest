@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
@@ -24,7 +25,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
             nativeQuery = true,
             value = "select g.id,\n" +
                     "       g.name,\n" +
-                    "       (select text from group_message where group_message.group_id = g.id order by created_at desc limit 1),\n" +
+                    "       (select text as lastMessage from group_message where group_message.group_id = g.id order by created_at desc limit 1),\n" +
                     "       max(gm.created_at) as data,\n" +
                     "       g.group_avatar_id\n" +
                     "from groups g\n" +
@@ -50,7 +51,10 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
                     "         join groups g on g.id = gm.group_id\n" +
                     "         join users u on u.id = gm.from_id\n" +
                     "where g.id = :groupId\n" +
-                    "order by gm.created_at desc;")
+                    "order by gm.created_at desc")
     List<Map<String,Object>> getAllMessage();
+    @Query(nativeQuery = true,
+            value = "insert into groups_users (group_id, user_id) values (:groupId,:userId)")
+    Optional<?> addMember(Long groupId, Long userId);
 
 }

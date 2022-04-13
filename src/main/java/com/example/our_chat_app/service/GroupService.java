@@ -138,4 +138,18 @@ public class GroupService {
         return ResponseEntity.ok(maps);
     }
 
+    public ResponseEntity<?> addMember(Long groupId, Long userId) {
+        User user = userRepository.findById(userId).get();
+        Optional<Group> byId = groupRepository.findById(groupId);
+        groupRepository.addMember(groupId,userId);
+        GroupsAdmins save = groupAdminRepository.save(new GroupsAdmins(user, byId.get()));
+        groupPermissionRepository.save(new GroupsAdminsPermissions(null,save,new Permission(null,"MEMBER",PermissionEnum.MEMBER)));
+return ResponseEntity.ok(new ApiResponse("User Successfully added to this group"));
+    }
+
+    public ResponseEntity<ApiResponse> deleteMessage(Long messageId) {
+        Optional<GroupMessage> byId = messageRepository.findById(messageId);
+        messageRepository.delete(byId.get());
+        return ResponseEntity.ok(new ApiResponse("Successfully deleted"));
+    }
 }

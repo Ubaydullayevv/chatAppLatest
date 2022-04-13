@@ -8,6 +8,8 @@ import com.example.our_chat_app.projection.PostProjection;
 import com.example.our_chat_app.repository.ChannelRepository;
 import com.example.our_chat_app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,12 +26,12 @@ public class ChannelService {
     UserRepository userRepository;
 
 
-    public List<ChannelProjection> getAllChannels(Long userId) {
+    public List<?> getAllChannels(Long userId) {
         return channelRepository.getAllChannels(userId);
     }
 
-    public List<?> getAllPosts(Long channelId) {
-        return channelRepository.getAllPosts(channelId);
+    public Page<?> getAllPosts(Long channelId, int page, int size) {
+        return channelRepository.getAllPosts(channelId, PageRequest.of(page, size));
     }
 
 

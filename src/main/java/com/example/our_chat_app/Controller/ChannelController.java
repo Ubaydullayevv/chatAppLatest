@@ -3,9 +3,9 @@ package com.example.our_chat_app.Controller;
 import com.example.our_chat_app.dto.ChannelDto;
 import com.example.our_chat_app.payload.ApiResponse;
 import com.example.our_chat_app.projection.ChannelProjection;
-import com.example.our_chat_app.projection.PostProjection;
 import com.example.our_chat_app.service.ChannelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,16 +23,19 @@ public class ChannelController {
 
     @GetMapping
     public HttpEntity<?> getAllChannels() {
-        Long userId=1000001L;
-        List<ChannelProjection> allChannels = channelService.getAllChannels(userId);
+        Long userId = 1000001L;
+        List<?> allChannels = channelService.getAllChannels(userId);
         ApiResponse response = new ApiResponse("success", true, allChannels);
         return ResponseEntity.ok(response);
     }
 
 
     @GetMapping("/posts/{channelId}")
-    public HttpEntity<?> getAllPosts(@PathVariable Long channelId) {
-        List<?> allPosts = channelService.getAllPosts(channelId);
+    public HttpEntity<?> getAllPosts(@PathVariable Long channelId,
+                                     @RequestParam(required = false, defaultValue = "5") int size,
+                                     @RequestParam(required = false, defaultValue = "1") int page
+                                     ) {
+        Page<?> allPosts = channelService.getAllPosts(channelId, page - 1, size);
         ApiResponse response = new ApiResponse("success", true, allPosts);
         return ResponseEntity.ok(response);
     }
@@ -41,16 +44,8 @@ public class ChannelController {
     @PostMapping("/create")
     public HttpEntity<?> createChannel(@Valid @RequestBody ChannelDto channelDto) {
         Long userid = 1000009L;
-        return channelService.createChannel(userid,channelDto);
+        return channelService.createChannel(userid, channelDto);
     }
-
-
-
-
-
-
-
-
 
 
 }

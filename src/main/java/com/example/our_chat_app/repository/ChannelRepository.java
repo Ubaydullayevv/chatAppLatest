@@ -3,6 +3,8 @@ package com.example.our_chat_app.repository;
 import com.example.our_chat_app.entity.Group;
 import com.example.our_chat_app.projection.ChannelProjection;
 import com.example.our_chat_app.projection.PostProjection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -25,7 +27,7 @@ public interface ChannelRepository extends JpaRepository<Group, Long> {
             "         join group_message gm on g.id = gm.group_id\n" +
             "where gu.user_id=:userId and g.is_channel=true\n" +
             "group by g.id, g.name")
-    List<ChannelProjection> getAllChannels(Long userId);
+    List<Map<String,Object>> getAllChannels(Long userId);
 
 
     @Query(nativeQuery = true,
@@ -42,7 +44,7 @@ public interface ChannelRepository extends JpaRepository<Group, Long> {
             "         join users u on u.id = gm.from_id\n" +
             "where g.id = :channelId\n" +
             "order by gm.created_at desc")
-    List<Map<String,Object>> getAllPosts(Long channelId);
+    Page<Map<String,Object>> getAllPosts(Long channelId, Pageable pageable);
 
 
 
