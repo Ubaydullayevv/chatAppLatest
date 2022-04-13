@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class GroupService {
 
     @Autowired
@@ -41,7 +43,6 @@ public class GroupService {
     public HttpEntity<?> createGroup(GroupDto groupDto, MultipartFile avatar, Long from) {
         ApiResponse response = new ApiResponse();
         try {
-
             Group group = new Group();
             group.setBio(groupDto.getBio());
             group.setCreatedAt(new Timestamp(System.currentTimeMillis()));
@@ -51,9 +52,11 @@ public class GroupService {
             group.setPrivate(groupDto.getIsPrivate());
             group.setChannel(groupDto.getIsChanel());
             group.setUsername(groupDto.getUsername());
-            groupRepository.save(group);
             List<User> users = userRepository.findAllById(groupDto.getUsers());
             users.remove(from);
+            group.setUsers(users);
+            group.addUser(userRepository.findById(from).get());
+            groupRepository.save(group);
             for (User user : users) {
                 GroupsPermissions userPermissions = new GroupsPermissions();
                 Permission permission = permissionRepository.findByPermissionEnum(PermissionEnum.MEMBER).get();
@@ -67,9 +70,6 @@ public class GroupService {
             groupsPermissions.setUser(userRepository.findById(from).get());
             groupsPermissions.setGroup(group);
             groupPermissionRepository.save(groupsPermissions);
-
-            group.setUsers(users);
-            group.addUser(userRepository.findById(from).get());
             groupRepository.save(group);
             response.setSuccess(true);
             response.setMessage("successfully created");
