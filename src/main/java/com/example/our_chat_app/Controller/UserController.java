@@ -22,8 +22,8 @@ public class UserController {
     }
 
     @PutMapping("/edit")
-    public HttpEntity editUser(@RequestBody UserEditDto userEditDto, Authentication authentication){
+    public HttpEntity editUser(@RequestBody UserEditDto userEditDto1, Authentication authentication){
         Long id = ((User) authentication.getPrincipal()).getId();
-        return userService.edit(id, userEditDto);
+        return userService.edit(id, userEditDto1);
     }
 }
