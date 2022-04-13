@@ -1,5 +1,6 @@
 package com.example.our_chat_app.Controller;
 
+import com.example.our_chat_app.dto.ChannelDto;
 import com.example.our_chat_app.payload.ApiResponse;
 import com.example.our_chat_app.projection.ChannelProjection;
 import com.example.our_chat_app.projection.PostProjection;
@@ -7,11 +8,9 @@ import com.example.our_chat_app.service.ChannelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -36,6 +35,15 @@ public class ChannelController {
         ApiResponse response = new ApiResponse("success", true, allPosts);
         return ResponseEntity.ok(response);
     }
+
+
+    @PostMapping("/create")
+    public HttpEntity<?> createChannel(@Valid @RequestBody ChannelDto channelDto) {
+        Long userid = 1000009L;
+        return channelService.createChannel(userid,channelDto);
+    }
+
+
 
 
 
