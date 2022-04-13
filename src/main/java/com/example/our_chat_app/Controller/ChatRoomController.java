@@ -2,13 +2,16 @@ package com.example.our_chat_app.Controller;
 
 import com.example.our_chat_app.dto.DelMessagesDto;
 import com.example.our_chat_app.dto.MessageDto;
+import com.example.our_chat_app.entity.User;
 import com.example.our_chat_app.service.ChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -22,8 +25,8 @@ public class ChatRoomController {
     public HttpEntity<?> getAllMessages(
             @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "10") int size,
-            @PathVariable Long to){
-        Long userId= 1000009L;
+            @PathVariable Long to,  Authentication authentication){
+        Long userId= ((User) authentication.getPrincipal()).getId();
         return chatRoomService.getMessages(to,userId, page,size);
     }
 
@@ -33,36 +36,35 @@ public class ChatRoomController {
 //        chatRoomService.editMessage(messageId);
 //    }
 
-    public static final Long fromId = 1000002L;
-
     @PostMapping("/send")
-    public HttpEntity<?> sendMessageRoom(@Valid @RequestBody MessageDto messageDto) {
-        Long userId= 1000002L;
+    public HttpEntity<?> sendMessageRoom(@Valid @RequestBody MessageDto messageDto, Authentication authentication) {
+        Long userId= ((User) authentication.getPrincipal()).getId();
         return chatRoomService.sendMessageRoom(userId,messageDto);
     }
 
-    @GetMapping("/chats/{userId}")
-    public HttpEntity<?> showAllChatsByUserId(@PathVariable Long userId){
+    @GetMapping("/chats")
+    public HttpEntity<?> showAllChatsByUserId(Authentication authentication){
+        Long userId = ((User) authentication.getPrincipal()).getId();
         return chatRoomService.getAllUserChatsByUserId(userId);
     }
 
 
 
     @GetMapping("/unread")
-    public HttpEntity<?> unreadMessage(){
-        Long userId= 1000002L;
+    public HttpEntity<?> unreadMessage(Authentication authentication){
+        Long userId= ((User) authentication.getPrincipal()).getId();
         return chatRoomService.getAllUnreadMessage(userId,true);
     }
 
     @GetMapping
-    public HttpEntity<?> getAllChats(){
-        Long userId= 1000002L;
+    public HttpEntity<?> getAllChats(Authentication authentication){
+        Long userId= ((User) authentication.getPrincipal()).getId();
         return chatRoomService.getAllUnreadMessage(userId,false);
     }
 
     @DeleteMapping("/messages")
-    public HttpEntity<?> deleteMessagesByIds(@Valid @RequestBody DelMessagesDto messagesDto){
-        Long userId= 1000007L;
+    public HttpEntity<?> deleteMessagesByIds(@Valid @RequestBody DelMessagesDto messagesDto, Authentication authentication){
+        Long userId= ((User) authentication.getPrincipal()).getId();
         return chatRoomService.deleteMessages(messagesDto, userId);
     }
 

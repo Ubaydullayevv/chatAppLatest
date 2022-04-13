@@ -64,7 +64,7 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         lastSeen = new Timestamp(System.currentTimeMillis());
-        return null;
+        return new ArrayList<>();
     }
 
 
