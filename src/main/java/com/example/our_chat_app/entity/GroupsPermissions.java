@@ -8,25 +8,31 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "admin_permissions")
-public class GroupsAdminsPermissions {
+@Table(name = "user_permissions")
+public class GroupsPermissions {
 
     @Id
-     @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "groups_admins_id")
-    private GroupsAdmins groupsAdmins;
     @OneToOne
     @NotNull
     private Permission permission;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "admin_id")
+    private User user;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
 
 }

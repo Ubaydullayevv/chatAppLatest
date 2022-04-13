@@ -42,9 +42,11 @@ public class ChatRoomController {
         return chatRoomService.sendMessageRoom(userId,messageDto);
     }
 
+
     @GetMapping("/chats")
     public HttpEntity<?> showAllChatsByUserId(Authentication authentication){
         Long userId = ((User) authentication.getPrincipal()).getId();
+
         return chatRoomService.getAllUserChatsByUserId(userId);
     }
 
