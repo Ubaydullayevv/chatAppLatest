@@ -33,8 +33,6 @@ public class GroupService {
     @Autowired
     PermissionRepository permissionRepository;
 
-    @Autowired
-    GroupAdminRepository groupAdminRepository;
 
     @Autowired
     GroupPermissionRepository groupPermissionRepository;
@@ -58,29 +56,18 @@ public class GroupService {
             List<User> users = userRepository.findAllById(groupDto.getUsers());
             users.remove(from);
             for (User user : users) {
-                GroupsAdminsPermissions adminsPermissions = new GroupsAdminsPermissions();
+                GroupsPermissions userPermissions = new GroupsPermissions();
                 Permission permission = permissionRepository.findByPermissionEnum(PermissionEnum.MEMBER).get();
-                adminsPermissions.setPermission(permission);
-                groupPermissionRepository.save(adminsPermissions);
-
-                GroupsAdmins groupsAdmins = new GroupsAdmins();
-                groupsAdmins.setGroup(group);
-                groupsAdmins.setAdmin(user);
-                groupsAdmins.setAdminsPermissions(Collections.singletonList(adminsPermissions));
-                groupAdminRepository.save(groupsAdmins);
-
-                adminsPermissions.setGroupsAdmins(groupsAdmins);
-                groupPermissionRepository.save(adminsPermissions);
+                userPermissions.setPermission(permission);
+                userPermissions.setUser(user);
+                userPermissions.setGroup(group);
+                groupPermissionRepository.save(userPermissions);
             }
-            GroupsAdmins groupsAdmins = new GroupsAdmins();
-            groupsAdmins.setAdmin(userRepository.findById(from).get());
-            groupsAdmins.setGroup(group);
-            groupAdminRepository.save(groupsAdmins);
-
-            GroupsAdminsPermissions groupsAdminsPermissions = new GroupsAdminsPermissions();
-            groupsAdminsPermissions.setPermission(permissionRepository.findByPermissionEnum(PermissionEnum.OWNER).get());
-            groupsAdminsPermissions.setGroupsAdmins(groupsAdmins);
-            groupPermissionRepository.save(groupsAdminsPermissions);
+            GroupsPermissions groupsPermissions = new GroupsPermissions();
+            groupsPermissions.setPermission(permissionRepository.findByPermissionEnum(PermissionEnum.OWNER).get());
+            groupsPermissions.setUser(userRepository.findById(from).get());
+            groupsPermissions.setGroup(group);
+            groupPermissionRepository.save(groupsPermissions);
 
             group.setUsers(users);
             group.addUser(userRepository.findById(from).get());
@@ -100,7 +87,6 @@ public class GroupService {
         ApiResponse response = new ApiResponse();
         try {
             if (!groupRepository.checkUser(from, messageDto.getGroupId())) throw new IllegalArgumentException("you have not joined the group. Please write after joining");
-
             Optional<Group> byId = groupRepository.findById(messageDto.getGroupId());
             if (!byId.isPresent()) throw new IllegalArgumentException("group not found");
             Group group = byId.get();
@@ -114,6 +100,7 @@ public class GroupService {
                 if (!byId1.isPresent()) throw new NullPointerException("reply message not found");
                 message.setReplayMsgId(messageDto.getReplyMessageId());
             }catch (Exception e){
+                System.out.println(e.getMessage());
             }
             message.setViewCount(1);
             messageRepository.save(message);

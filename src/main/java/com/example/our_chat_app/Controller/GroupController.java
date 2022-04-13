@@ -33,4 +33,6 @@ public class GroupController {
     public ResponseEntity<?> showAllGroups(@PathVariable Long userId){
         return groupService.showAllGroups(userId);
 }
+
+
 }

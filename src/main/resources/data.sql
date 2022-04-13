@@ -89,6 +89,7 @@ insert into permissions(id, name, permission_enum) values (1000077, 'DELETE_USER
 insert into permissions(id, name, permission_enum) values (1000078, 'CHANGE_AVATAR', 'CHANGE_AVATAR');
 insert into permissions(id, name, permission_enum) values (1000079, 'CHANGE_NAME', 'CHANGE_NAME');
 insert into permissions(id, name, permission_enum) values (1000080, 'OWNER', 'OWNER');
+insert into permissions(id, name, permission_enum) values (1000081, 'BLOCKED', 'BLOCKED');
 
 
 
