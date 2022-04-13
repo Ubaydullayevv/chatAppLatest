@@ -56,38 +56,35 @@ public class AttachmentService {
             e.printStackTrace();
         }
         String fileDownloadUri = "";
-        try {
-            LocalDateTime uploadTime = attachment.getUploadTime();
-            int year = uploadTime.getYear();
-            int month = uploadTime.getMonthValue();
-            int day = uploadTime.getDayOfMonth();
-            File file5 = new File(attachment.getFilePath() + "\\uploads");
-            if (!file5.exists()) {
-                file5.mkdir();
-            }
-            File file1 = new File(file5 + "\\" + year);
-            if (!file1.exists()) {
-                file1.mkdir();
-            }
-            File file2 = new File(file1 + "\\" + month);
-            if (!file2.exists()) {
-                file2.mkdir();
-            }
-            File file3 = new File(file2 + "\\" + day);
-            if (!file3.exists()) {
-                file3.mkdir();
-            }
-            String newPath = file3 + "\\" + attachment.getGeneratedFileName();
-            file.transferTo(new File(newPath));
-            attachment.setFilePath(newPath);
-            attachmentRepo.save(attachment);
-
-            fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/downloadFile/")
-                    .path(attachment.getOriginalFileName())
-                    .toUriString();
-        } catch (IOException e) {
+        LocalDateTime uploadTime = attachment.getUploadTime();
+        int year = uploadTime.getYear();
+        int month = uploadTime.getMonthValue();
+        int day = uploadTime.getDayOfMonth();
+        File file5 = new File(attachment.getFilePath() + "\\uploads");
+        if (!file5.exists()) {
+            file5.mkdir();
         }
+        File file1 = new File(file5 + "\\" + year);
+        if (!file1.exists()) {
+            file1.mkdir();
+        }
+        File file2 = new File(file1 + "\\" + month);
+        if (!file2.exists()) {
+            file2.mkdir();
+        }
+        File file3 = new File(file2 + "\\" + day);
+        if (!file3.exists()) {
+            file3.mkdir();
+        }
+            /*String newPath = file3 + "\\" + attachment.getGeneratedFileName();
+            file.transferTo(new File(newPath));
+            attachment.setFilePath(newPath);*/
+        attachmentRepo.save(attachment);
+
+        fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(attachment.getOriginalFileName())
+                .toUriString();
         return fileDownloadUri;
     }
 
@@ -111,53 +108,6 @@ public class AttachmentService {
 
         }
         return fileDtoList;
-    }
-    public Attachment uploadFileForDistributor(MultipartFile file) {
-        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-
-        Random random = new Random();
-        Attachment attachment = new Attachment();
-        try {
-            attachment = new Attachment(
-                    null,
-                    LocalDateTime.now(),
-                    attachment.getFilePath(),
-                    String.format("%s%s", System.currentTimeMillis(), random.nextInt(100000)) + "." + extension,
-                    file.getOriginalFilename(),
-                    file.getContentType(),
-                    file.getSize(),
-                    new AttachmentContent(file.getBytes())
-            );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Attachment savedAttachment=null;
-        LocalDateTime uploadTime = attachment.getUploadTime();
-        int year = uploadTime.getYear();
-        int month = uploadTime.getMonthValue();
-        int day = uploadTime.getDayOfMonth();
-        File file5 = new File(attachment.getFilePath() + "\\distributorsAvatars");
-        if (!file5.exists()) {
-            file5.mkdir();
-        }
-        File file1 = new File(file5 + "\\" + year);
-        if (!file1.exists()) {
-            file1.mkdir();
-        }
-        File file2 = new File(file1 + "\\" + month);
-        if (!file2.exists()) {
-            file2.mkdir();
-        }
-        File file3 = new File(file2 + "\\" + day);
-        if (!file3.exists()) {
-            file3.mkdir();
-        }
-        String newPath = file3 + "\\" + attachment.getGeneratedFileName();
-        attachment.setFilePath(newPath);
-        savedAttachment = attachmentRepo.save(attachment);
-
-
-        return savedAttachment;
     }
 
 }
