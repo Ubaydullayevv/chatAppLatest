@@ -34,10 +34,6 @@ public class ChannelService {
     @Autowired
     GroupMessageRepository groupMessageRepository;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 23ea64cac24cbd67abfe5e3931bd3ea225a0164e
     public List<?> getAllChannels(Long userId) {
         return channelRepository.getAllChannels(userId);
     }

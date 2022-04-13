@@ -30,11 +30,8 @@ public class ChannelController {
 
     @GetMapping
     public HttpEntity<?> getAllChannels() {
-<<<<<<< HEAD
-        Long userId = 1000001L;
-=======
+
         Long userId=1000001L;
->>>>>>> 23ea64cac24cbd67abfe5e3931bd3ea225a0164e
         List<?> allChannels = channelService.getAllChannels(userId);
         ApiResponse response = new ApiResponse("success", true, allChannels);
         return ResponseEntity.ok(response);
@@ -60,8 +57,7 @@ public class ChannelController {
     }
 
 
-<<<<<<< HEAD
-=======
+
     @PostMapping("/writePost")
     public HttpEntity<?> writePost(@Valid @RequestBody GroupMessageDto groupMessageDto) {
         Long userid = 1000009L;
@@ -85,7 +81,4 @@ public class ChannelController {
 
 
 
-
-
->>>>>>> 23ea64cac24cbd67abfe5e3931bd3ea225a0164e
 }

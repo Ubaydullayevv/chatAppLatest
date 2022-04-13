@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Data
 public class GroupMessageDto {
+    Long id;
     @NotNull(message = "you must select a group")
     Long groupId ;
     @NotEmpty(message = "the message must not be empty")
