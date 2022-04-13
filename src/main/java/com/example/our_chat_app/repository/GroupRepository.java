@@ -28,6 +28,8 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
                     "       max(gm.created_at) as data,\n" +
                     "       g.group_avatar_id\n" +
                     "from groups g\n" +
+                    "join groups_users gu on g.id = gu.group_id\n" +
+                    "join group_message gm on g.id = gm.group_id\n" +
                     "         join groups_users gu on g.id = gu.group_id\n" +
                     "         join group_message gm on g.id = gm.group_id\n" +
                     "where gu.user_id=:userId and g.is_channel=false\n" +
