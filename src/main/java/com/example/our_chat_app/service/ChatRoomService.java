@@ -39,7 +39,7 @@ public class ChatRoomService {
             response.setMessage("success");
             response.setData(map);
             response.setSuccess(true);
-            chatRoomRepository.checkMessageRead(to,userId,page,size);
+            chatRoomRepository.checkMessageRead(to, userId, page, size);
         } catch (Exception e) {
             e.printStackTrace();
             response.setMessage(e.getMessage());
@@ -118,10 +118,6 @@ public class ChatRoomService {
     }
 
 
-    public void editMessage(Long messageId) {
-        ChatRoom byIdChat = chatRoomRepository.getById(messageId);
-    }
-
     public HttpEntity<?> getAllUnreadMessage(Long from, boolean b) {
         ApiResponse response = new ApiResponse();
         try {
@@ -134,7 +130,7 @@ public class ChatRoomService {
         } catch (Exception e) {
             e.printStackTrace();
             response.setMessage(e.getMessage());
-            response.setSuccess(true);
+            response.setSuccess(false);
         }
         return ResponseEntity.ok(response);
     }
@@ -152,7 +148,7 @@ public class ChatRoomService {
         } catch (Exception e) {
             e.printStackTrace();
             response.setMessage(e.getMessage());
-            response.setSuccess(true);
+            response.setSuccess(false);
         }
         return ResponseEntity.ok(response);
     }
@@ -165,9 +161,10 @@ public class ChatRoomService {
             if (messagesDto.getDeleteForEveryone()) {
                 for (Long id : messagesDto.getIds()) {
                     try {
-                        if (!chatMessagesRepository.checkUserCanDelete(from, id)) throw new IllegalArgumentException("you can not delete this message");
+                        if (!chatMessagesRepository.checkUserCanDelete(from, id))
+                            throw new IllegalArgumentException("you can not delete this message");
                         chatMessagesRepository.deleteById(id);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         notDeleted.add(id);
                         System.err.println(e.getMessage());
                     }
@@ -175,31 +172,47 @@ public class ChatRoomService {
             } else {
                 for (Long id : messagesDto.getIds()) {
                     try {
-                        if (!chatMessagesRepository.checkUserCanDelete(from, id)) throw new IllegalArgumentException("you can not delete this message");
+                        if (!chatMessagesRepository.checkUserCanDelete(from, id))
+                            throw new IllegalArgumentException("you can not delete this message");
                         if (chatMessagesRepository.checkDeletion(id, from)) {
-                            System.out.println("message id: "+id);
-                            System.out.println("from id: "+from);
+                            System.out.println("message id: " + id);
+                            System.out.println("from id: " + from);
                             chatMessagesRepository.deleteById(id);
                         } else {
                             Optional<ChatRoomMessage> byId = chatMessagesRepository.findById(id);
                             if (!byId.isPresent()) throw new NullPointerException("id topilmadi");
                             ChatRoomMessage chatRoomMessage = byId.get();
                             chatRoomMessage.setDeleteFrom(chatRoomMessage.getFrom().getId().equals(from));
-                            System.out.println("message id: "+id);
-                            System.out.println("from id: "+from);
+                            System.out.println("message id: " + id);
+                            System.out.println("from id: " + from);
                             chatMessagesRepository.save(chatRoomMessage);
 
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         notDeleted.add(id);
                         System.err.println(e.getMessage());
                     }
                 }
             }
-            if(notDeleted.size()>0){
+            if (notDeleted.size() > 0) {
                 response.setMessage("some message deleted");
-            }else response.setMessage("successfully deleted");
+            } else response.setMessage("successfully deleted");
             response.setData(notDeleted);
+            response.setSuccess(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setSuccess(false);
+            response.setMessage(e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    public HttpEntity<?> editMessage(MessageDto messageDto) {
+        ApiResponse response = new ApiResponse();
+        try {
+            ChatRoomMessage byIdMessage = chatMessagesRepository.getById(messageDto.getId());
+            byIdMessage.setText(messageDto.getMessage());
+            chatMessagesRepository.save(byIdMessage);
             response.setSuccess(true);
         } catch (Exception e) {
             e.printStackTrace();
