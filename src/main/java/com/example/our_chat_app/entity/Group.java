@@ -50,7 +50,6 @@ public class Group {
 
     private boolean isPrivate;
 
-    @NotEmpty
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "group")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<GroupMessage> groupMessages = new ArrayList<>();
