@@ -28,10 +28,10 @@ public class ChatRoomController {
     }
 
 
-//    @PutMapping("{/messageId}")
-//    public HttpEntity<?> editMessage(@PathVariable Long messageId){
-//        chatRoomService.editMessage(messageId);
-//    }
+    @PutMapping("/edit")
+    public HttpEntity<?> editMessage(@RequestBody MessageDto messageDto){
+        return chatRoomService.editMessage(messageDto);
+    }
 
     public static final Long fromId = 1000002L;
 
