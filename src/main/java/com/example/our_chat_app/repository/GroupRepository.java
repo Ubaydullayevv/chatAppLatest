@@ -1,6 +1,7 @@
 package com.example.our_chat_app.repository;
 
 import com.example.our_chat_app.entity.Group;
+import com.example.our_chat_app.projection.PostProjection;
 import com.example.our_chat_app.projetion.GroupProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -31,8 +32,25 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
                     "join group_message gm on g.id = gm.group_id\n" +
                     "         join groups_users gu on g.id = gu.group_id\n" +
                     "         join group_message gm on g.id = gm.group_id\n" +
+                    "where gu.user_id=:userId and g.is_channel=false\n" +
                     "group by g.id, g.name"
     )
-    List<Map<String, Object>> showAllGroups(Long afishaId);
+    List<Map<String, Object>> showAllGroups(Long userId);
+    @Query(nativeQuery = true,
+            value = "select gm.id,\n" +
+                    "       gm.text,\n" +
+                    "       concat(u.firstname, '', u.lastname) as authorName,\n" +
+                    "       gm.view_count,\n" +
+                    "       (case when view_count isnull then false else true end ) as \"isRead\",\n" +
+                    "       gm.created_at,\n" +
+                    "       gm.updated_at,\n" +
+                    "        (case when updated_at isnull then false else true end ) as \"isEdited\"\n" +
+                    "\n" +
+                    "from group_message gm\n" +
+                    "         join groups g on g.id = gm.group_id\n" +
+                    "         join users u on u.id = gm.from_id\n" +
+                    "where g.id = :groupId\n" +
+                    "order by gm.created_at desc;")
+    List<Map<String,Object>> getAllMessage();
 
 }

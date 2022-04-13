@@ -24,12 +24,12 @@ public class ChannelService {
     UserRepository userRepository;
 
 
-    public List<ChannelProjection> getAllChannels() {
-        return channelRepository.getAllChannels();
+    public List<ChannelProjection> getAllChannels(Long userId) {
+        return channelRepository.getAllChannels(userId);
     }
 
-    public List<PostProjection> getAllPosts() {
-        return channelRepository.getAllPosts();
+    public List<?> getAllPosts(Long channelId) {
+        return channelRepository.getAllPosts(channelId);
     }
 
 
