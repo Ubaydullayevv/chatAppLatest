@@ -2,6 +2,7 @@ package com.example.our_chat_app.service;
 
 import com.example.our_chat_app.dto.GroupDto;
 import com.example.our_chat_app.dto.GroupMessageDto;
+import com.example.our_chat_app.dto.PermissionDto;
 import com.example.our_chat_app.entity.*;
 import com.example.our_chat_app.entity.enums.PermissionEnum;
 import com.example.our_chat_app.payload.ApiResponse;
@@ -144,9 +145,10 @@ public class GroupService {
     public ResponseEntity<?> addMember(Long groupId, Long userId) {
         User user = userRepository.findById(userId).get();
         Optional<Group> byId = groupRepository.findById(groupId);
-        groupRepository.addMember(groupId, userId);
-//        GroupsAdmins save = groupAdminRepository.save(new GroupsAdmins(user, byId.get()));
-//        groupPermissionRepository.save(new GroupsAdminsPermissions(null, save, new Permission(null, "MEMBER", PermissionEnum.MEMBER)));
+        Optional<Permission> byPermissionEnum = permissionRepository.findByPermissionEnum(PermissionEnum.MEMBER);
+        groupPermissionRepository.save(new GroupsPermissions(null,byPermissionEnum.get(),user, byId.get()));
+        byId.get().setUsers(Collections.singletonList(user));
+
         return ResponseEntity.ok(new ApiResponse("User Successfully added to this group"));
     }
 
@@ -154,5 +156,34 @@ public class GroupService {
         Optional<GroupMessage> byId = messageRepository.findById(messageId);
         messageRepository.delete(byId.get());
         return ResponseEntity.ok(new ApiResponse("Successfully deleted"));
+    }
+
+    public ResponseEntity<?> givePermission(PermissionDto permissionDto) {
+        User user = userRepository.findById(permissionDto.getUserId()).get();
+        Group byId = groupRepository.findById(permissionDto.getGroupId()).get();
+        String msg="";
+        if (permissionDto.isGiveCHANGE_AVATAR_ROLE()) {
+            groupPermissionRepository.save(new GroupsPermissions(null,permissionRepository.findByPermissionEnum(PermissionEnum.CHANGE_AVATAR).get(),user, byId));
+       msg+="Change avatar permission successfully added";
+        }
+        if (permissionDto.isGiveCHANGE_GROUPNAME_ROLE()) {
+            groupPermissionRepository.save(new GroupsPermissions(null,permissionRepository.findByPermissionEnum(PermissionEnum.CHANGE_NAME).get(),user, byId));
+            msg+="Change group name permission successfully added";
+        }
+        if (permissionDto.isGiveOWNER()) {
+            groupPermissionRepository.save(new GroupsPermissions(null,permissionRepository.findByPermissionEnum(PermissionEnum.OWNER).get(),user, byId));
+            byId.setCreatedBy(user);
+            groupRepository.save(byId);
+            msg+="Ownership transfered succesfully";
+        }
+        if (permissionDto.isGiveDELETE_USER_ROLE()) {
+            groupPermissionRepository.save(new GroupsPermissions(null,permissionRepository.findByPermissionEnum(PermissionEnum.DELETE_USER).get(),user, byId));
+            msg+="Delete user permission successfully added";
+        }
+        if (permissionDto.isGiveDELETEUSER_MESSAGE_ROLE()) {
+            groupPermissionRepository.save(new GroupsPermissions(null,permissionRepository.findByPermissionEnum(PermissionEnum.DELETE_USER_MESSAGE).get(),user, byId));
+            msg+="Delete user message permission successfully added";
+        }
+        return ResponseEntity.ok(msg);
     }
 }
