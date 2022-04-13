@@ -138,4 +138,19 @@ public class GroupService {
         return ResponseEntity.ok(maps);
     }
 
+    public HttpEntity<?> edit(GroupMessageDto groupMessageDto, Long userId) {
+        ApiResponse response = new ApiResponse();
+        try {
+            GroupMessage groupMessage=messageRepository.getGroupMessageByUserId(userId);
+            groupMessage.setText(groupMessageDto.getMessage());
+            messageRepository.save(groupMessage);
+            response.setSuccess(true);
+            response.setMessage("Edited successfully");
+        }catch (Exception e) {
+            e.printStackTrace();
+            response.setMessage(e.getMessage());
+            response.setSuccess(false);
+        }
+        return ResponseEntity.ok(response);
+    }
 }
