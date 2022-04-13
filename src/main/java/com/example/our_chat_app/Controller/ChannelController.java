@@ -23,15 +23,16 @@ public class ChannelController {
 
     @GetMapping
     public HttpEntity<?> getAllChannels() {
-        List<ChannelProjection> allChannels = channelService.getAllChannels();
+        Long userId=1000001L;
+        List<ChannelProjection> allChannels = channelService.getAllChannels(userId);
         ApiResponse response = new ApiResponse("success", true, allChannels);
         return ResponseEntity.ok(response);
     }
 
 
-    @GetMapping("/posts")
-    public HttpEntity<?> getAllPosts() {
-        List<PostProjection> allPosts = channelService.getAllPosts();
+    @GetMapping("/posts/{channelId}")
+    public HttpEntity<?> getAllPosts(@PathVariable Long channelId) {
+        List<?> allPosts = channelService.getAllPosts(channelId);
         ApiResponse response = new ApiResponse("success", true, allPosts);
         return ResponseEntity.ok(response);
     }
