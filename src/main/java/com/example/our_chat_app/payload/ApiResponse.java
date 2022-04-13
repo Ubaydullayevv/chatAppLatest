@@ -18,4 +18,10 @@ import lombok.NoArgsConstructor;
     public ApiResponse(Object data) {
         this.data = data;
     }
+
+
+    public ApiResponse(String message, boolean isSuccess) {
+        this.message = message;
+        this.isSuccess = isSuccess;
+    }
 }

@@ -25,7 +25,7 @@ public interface ChannelRepository extends JpaRepository<Group, Long> {
             "         join group_message gm on g.id = gm.group_id\n" +
             "where gu.user_id=:userId and g.is_channel=true\n" +
             "group by g.id, g.name")
-    List<ChannelProjection> getAllChannels(Long userId);
+    List<Map<String, Object>> getAllChannels(Long userId);
 
 
     @Query(nativeQuery = true,

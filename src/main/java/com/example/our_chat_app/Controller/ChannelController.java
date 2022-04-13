@@ -1,7 +1,12 @@
 package com.example.our_chat_app.Controller;
 
 import com.example.our_chat_app.dto.ChannelDto;
+
+import com.example.our_chat_app.dto.GroupMessageDto;
+import com.example.our_chat_app.dto.MessageDto;
+
 import com.example.our_chat_app.entity.User;
+
 import com.example.our_chat_app.payload.ApiResponse;
 import com.example.our_chat_app.projection.ChannelProjection;
 import com.example.our_chat_app.projection.PostProjection;
@@ -26,7 +31,7 @@ public class ChannelController {
     @GetMapping
     public HttpEntity<?> getAllChannels() {
         Long userId=1000001L;
-        List<ChannelProjection> allChannels = channelService.getAllChannels(userId);
+        List<?> allChannels = channelService.getAllChannels(userId);
         ApiResponse response = new ApiResponse("success", true, allChannels);
         return ResponseEntity.ok(response);
     }
@@ -45,6 +50,23 @@ public class ChannelController {
         Long userid = ((User) authentication.getPrincipal()).getId();
         return channelService.createChannel(userid,channelDto);
     }
+
+
+    @PostMapping("/writePost")
+    public HttpEntity<?> writePost(@Valid @RequestBody GroupMessageDto groupMessageDto) {
+        Long userid = 1000009L;
+        return channelService.writePost(userid, groupMessageDto);
+    }
+
+
+    // TODO: 4/13/2022 postni o'chirish uchun kanalni admini bo'lish kerak
+
+    @DeleteMapping("/deletePost/{postId}")
+    public HttpEntity<?> deletePost(@PathVariable Long postId) {
+        return channelService.deletePost(postId);
+    }
+
+
 
 
 
