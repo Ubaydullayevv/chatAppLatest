@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class MessageDto {
 
+    Long id;
     @NotNull(message = "please you don't select to users")
     private Long toId;
     @NotEmpty(message = "the message must not be empty")

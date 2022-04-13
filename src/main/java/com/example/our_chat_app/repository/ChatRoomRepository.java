@@ -1,15 +1,16 @@
 package com.example.our_chat_app.repository;
 
+import com.example.our_chat_app.dto.MessageDto;
 import com.example.our_chat_app.entity.ChatRoom;
-import com.example.our_chat_app.projetion.ChatProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
+@Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     @Query(value = "select :page                                                                                 as page,\n" +
             "       :size                                                                                 as size,\n" +
@@ -180,7 +181,11 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             "group by cr.id\n")
     List<Map<String, Object>> getAllUserChatsById(Long from);
 
-    
+
+    @Query(nativeQuery = true, value = "select * from chat_messages")
+    void editMessage(MessageDto messageDto);
+
+
 //    @Query(nativeQuery = true, value = "")
 //    Map<String, Object> getChatById(Long chatRoomId);
 }
