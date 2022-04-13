@@ -1,5 +1,6 @@
 package com.example.our_chat_app.service;
 
+import com.example.our_chat_app.dto.UserEditDto;
 import com.example.our_chat_app.entity.User;
 import com.example.our_chat_app.payload.ApiResponse;
 import com.example.our_chat_app.repository.UserRepository;
@@ -35,22 +36,23 @@ public class UserService implements UserDetailsService {
             response.setSuccess(true);
             response.setMessage("success");
             response.setData(maps);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             response.setMessage(e.getMessage());
             response.setSuccess(false);
         }
         return ResponseEntity.ok(response);
     }
-    public List<Map<String, Object>> makeStatus(List<Map<String,Object>> users){
+
+    public List<Map<String, Object>> makeStatus(List<Map<String, Object>> users) {
         List<Map<String, Object>> response = new ArrayList<>();
         for (Map<String, Object> user : users) {
             Timestamp leftAt = (Timestamp) user.get("lastSeen");
-            Duration duration = Duration.between(leftAt.toLocalDateTime(),LocalDateTime.now());
-            String status = getStatus(duration,leftAt.toLocalDateTime());
+            Duration duration = Duration.between(leftAt.toLocalDateTime(), LocalDateTime.now());
+            String status = getStatus(duration, leftAt.toLocalDateTime());
             Map<String, Object> map = new HashMap<>();
             Set<String> strings = user.keySet();
-            strings.forEach(s -> map.put(s,user.get(s)));
+            strings.forEach(s -> map.put(s, user.get(s)));
             map.put("status", status);
             response.add(map);
         }
@@ -59,27 +61,27 @@ public class UserService implements UserDetailsService {
 
     public String getStatus(Duration l, LocalDateTime leftAt) {
         String status;
-        if(l.toDays()==30) {
+        if (l.toDays() == 30) {
             return "a month ago";
         }
-        if (l.toDays()>29) {
+        if (l.toDays() > 29) {
             status = leftAt.format(DateTimeFormatter.ofPattern("yyyy-MMMM-dd"));
-        }else {
-            if(l.toHours()>47){
-                status = l.toDays()+" days ago";
+        } else {
+            if (l.toHours() > 47) {
+                status = l.toDays() + " days ago";
             } else {
-                if(l.toHours()>23){
+                if (l.toHours() > 23) {
                     status = "a day ago";
                 } else {
-                    if(l.toHours()>1){
-                        status = l.toHours()+" hours ago";
-                    }else {
-                        if(l.toHours()==1){
+                    if (l.toHours() > 1) {
+                        status = l.toHours() + " hours ago";
+                    } else {
+                        if (l.toHours() == 1) {
                             status = "a hour ago";
                         } else {
-                            if (l.toMinutes()>1) {
-                                status = l.toMinutes()+" minutes ago";
-                            }else {
+                            if (l.toMinutes() > 1) {
+                                status = l.toMinutes() + " minutes ago";
+                            } else {
                                 status = "a minute ago";
                             }
                         }
@@ -95,7 +97,7 @@ public class UserService implements UserDetailsService {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             return userOptional.get();
-        }else throw new UsernameNotFoundException("user not found");
+        } else throw new UsernameNotFoundException("user not found");
     }
 
     public ResponseEntity<?> getHomePage(Long userId) {
@@ -117,13 +119,36 @@ public class UserService implements UserDetailsService {
         String profile = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/profile/")
                 .toUriString();
-        Map<String,String> maps=new HashMap<>();
-        maps.put("Groups",groups);
-        maps.put("Chats",chats);
-        maps.put("Unread Messages",unreadMessage);
-        maps.put("All messages",allMessage);
-        maps.put("Profile",profile);
+        Map<String, String> maps = new HashMap<>();
+        maps.put("Groups", groups);
+        maps.put("Chats", chats);
+        maps.put("Unread Messages", unreadMessage);
+        maps.put("All messages", allMessage);
+        maps.put("Profile", profile);
         return ResponseEntity.ok(maps);
 
+    }
+
+    public HttpEntity edit(Long id, UserEditDto userEditDto) {
+        ApiResponse response = new ApiResponse();
+        try {
+            Optional<User> byIdUser = userRepository.findById(id);
+            User user = byIdUser.get();
+            user.setBio(userEditDto.getBio());
+            user.setEmail(userEditDto.getEmail());
+            user.setFirstname(userEditDto.getFirstname());
+            user.setLastname(userEditDto.getLastname());
+            user.setUsername(userEditDto.getUsername());
+            user.setPassword(userEditDto.getPassword());
+            user.setPhoneNumber(userEditDto.getPhoneNumber());
+            userRepository.save(user);
+            response.setMessage("Edited successfully");
+            response.setSuccess(true);
+        }catch (Exception e) {
+            e.printStackTrace();
+            response.setMessage(e.getMessage());
+            response.setSuccess(false);
+        }
+        return ResponseEntity.ok(response);
     }
 }

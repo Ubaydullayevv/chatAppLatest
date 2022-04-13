@@ -1,13 +1,13 @@
 package com.example.our_chat_app.Controller;
 
+import com.example.our_chat_app.dto.UserEditDto;
+import com.example.our_chat_app.entity.User;
 import com.example.our_chat_app.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/user")
@@ -21,4 +21,9 @@ public class UserController {
         return userService.getLikeUsername(username);
     }
 
+    @PutMapping("/edit")
+    public HttpEntity editUser(@RequestBody UserEditDto userEditDto, Authentication authentication){
+        Long id = ((User) authentication.getPrincipal()).getId();
+        return userService.edit(id, userEditDto);
+    }
 }
