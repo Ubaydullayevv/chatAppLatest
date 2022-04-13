@@ -40,7 +40,6 @@ public class GroupService {
     GroupPermissionRepository groupPermissionRepository;
 
 
-
     public HttpEntity<?> createGroup(GroupDto groupDto, MultipartFile avatar, Long from) {
         ApiResponse response = new ApiResponse();
         try {
@@ -75,7 +74,7 @@ public class GroupService {
             response.setSuccess(true);
             response.setMessage("successfully created");
             response.setData(group.getId());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             response.setSuccess(false);
             response.setMessage(e.getMessage());
@@ -86,7 +85,8 @@ public class GroupService {
     public HttpEntity<?> sendMessage(GroupMessageDto messageDto, Long from) {
         ApiResponse response = new ApiResponse();
         try {
-            if (!groupRepository.checkUser(from, messageDto.getGroupId())) throw new IllegalArgumentException("you have not joined the group. Please write after joining");
+            if (!groupRepository.checkUser(from, messageDto.getGroupId()))
+                throw new IllegalArgumentException("you have not joined the group. Please write after joining");
             Optional<Group> byId = groupRepository.findById(messageDto.getGroupId());
             if (!byId.isPresent()) throw new IllegalArgumentException("group not found");
             Group group = byId.get();
@@ -99,14 +99,14 @@ public class GroupService {
                 Optional<GroupMessage> byId1 = messageRepository.findById(messageDto.getReplyMessageId());
                 if (!byId1.isPresent()) throw new NullPointerException("reply message not found");
                 message.setReplayMsgId(messageDto.getReplyMessageId());
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
             message.setViewCount(1);
             messageRepository.save(message);
             response.setMessage("success");
             response.setSuccess(true);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             response.setSuccess(false);
             response.setMessage(e.getMessage());
@@ -115,7 +115,7 @@ public class GroupService {
     }
 
     public ResponseEntity<?> showAllGroups(Long userId) {
-        ApiResponse apiResponse=new ApiResponse();
+        ApiResponse apiResponse = new ApiResponse();
         List<Map<String, Object>> maps = groupRepository.showAllGroups(userId);
         apiResponse.setData(maps);
         apiResponse.setSuccess(true);
@@ -125,4 +125,34 @@ public class GroupService {
         return ResponseEntity.ok(maps);
     }
 
+    public HttpEntity<?> edit(GroupMessageDto groupMessageDto, Long userId) {
+        ApiResponse response = new ApiResponse();
+        try {
+            GroupMessage groupMessage = messageRepository.getGroupMessageByUserId(userId);
+            groupMessage.setText(groupMessageDto.getMessage());
+            messageRepository.save(groupMessage);
+            response.setSuccess(true);
+            response.setMessage("Edited successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setMessage(e.getMessage());
+            response.setSuccess(false);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    public ResponseEntity<?> addMember(Long groupId, Long userId) {
+        User user = userRepository.findById(userId).get();
+        Optional<Group> byId = groupRepository.findById(groupId);
+        groupRepository.addMember(groupId, userId);
+//        GroupsAdmins save = groupAdminRepository.save(new GroupsAdmins(user, byId.get()));
+//        groupPermissionRepository.save(new GroupsAdminsPermissions(null, save, new Permission(null, "MEMBER", PermissionEnum.MEMBER)));
+        return ResponseEntity.ok(new ApiResponse("User Successfully added to this group"));
+    }
+
+    public ResponseEntity<ApiResponse> deleteMessage(Long messageId) {
+        Optional<GroupMessage> byId = messageRepository.findById(messageId);
+        messageRepository.delete(byId.get());
+        return ResponseEntity.ok(new ApiResponse("Successfully deleted"));
+    }
 }

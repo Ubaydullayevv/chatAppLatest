@@ -18,12 +18,11 @@ import javax.validation.constraints.NotNull;
 public class GroupsPermissions {
 
     @Id
-     @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
     @OneToOne
     @NotNull
-
     private Permission permission;
 
     @NotNull
