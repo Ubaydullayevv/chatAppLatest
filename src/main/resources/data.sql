@@ -1,15 +1,15 @@
 
 ------------------------------------- insert into users
-insert into users (id, firstname,password, lastname, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000001, 'Chelsea', 'Shinn', '111','cshinn0@tmall.com', '546-545-0106', 'cshinn0', '2022-03-20', 'amet sapien dignissim',true);
-insert into users (id, firstname,password, lastname, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000002, 'Anna', 'Chalkly', '111','achalkly1@ed.gov', '475-760-7974', 'achalkly1', '2022-03-18', 'donec odio',true);
-insert into users (id, firstname,password, lastname, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000003, 'Ange', 'Cassells', '111','acassells2@ebay.co.uk', '756-598-4050', 'acassells2', '2022-03-26', 'tristique tortor',true);
-insert into users (id, firstname,password, lastname, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000004, 'Doria', 'Orrah', '111','dorrah3@weather.com', '314-385-1766', 'dorrah3', '2022-03-20', 'id ornare',true);
-insert into users (id, firstname,password, lastname, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000005, 'Jesselyn', 'Humbee', '111','jhumbee4@naver.com', '599-785-1232', 'jhumbee4', '2022-03-18', 'parturient montes',true);
-insert into users (id, firstname,password, lastname, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000006, 'Birk', 'Isakowicz', '111','bisakowicz5@google.com.hk', '768-461-7801', 'bisakowicz5', '2022-03-21', 'faucibus accumsan odio',true);
-insert into users (id, firstname,password, lastname, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000007, 'Avery', 'Croal', '111','acroal6@amazon.de', '482-550-5060', 'acroal6', '2022-03-13', 'et commodo',true);
-insert into users (id, firstname,password, lastname, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000008, 'Nanon', 'Apfelmann', '111','napfelmann7@google.co.uk', '861-461-9971', 'napfelmann7', '2022-04-01', 'nulla pede',true);
-insert into users (id, firstname,password, lastname, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000009, 'Malorie', 'Frobisher', '111','mfrobisher8@behance.net', '447-515-8794', 'mfrobisher8', '2022-04-08', 'in ante',true);
-insert into users (id, firstname,password, lastname, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000010, 'Vic', 'Bucktharp', '111','vbucktharp9@pen.io', '622-265-7225', 'vbucktharp9', '2022-04-10', 'non mauris morbi',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000001, 'Chelsea', 'Shinn', '111','cshinn0@tmall.com', '546-545-0106', 'cshinn0', '2022-03-20', 'amet sapien dignissim',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000002, 'Anna', 'Chalkly', '111','achalkly1@ed.gov', '475-760-7974', 'achalkly1', '2022-03-18', 'donec odio',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000003, 'Ange', 'Cassells', '111','acassells2@ebay.co.uk', '756-598-4050', 'acassells2', '2022-03-26', 'tristique tortor',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000004, 'Doria', 'Orrah', '111','dorrah3@weather.com', '314-385-1766', 'dorrah3', '2022-03-20', 'id ornare',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000005, 'Jesselyn', 'Humbee', '111','jhumbee4@naver.com', '599-785-1232', 'jhumbee4', '2022-03-18', 'parturient montes',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000006, 'Birk', 'Isakowicz', '111','bisakowicz5@google.com.hk', '768-461-7801', 'bisakowicz5', '2022-03-21', 'faucibus accumsan odio',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000007, 'Avery', 'Croal', '111','acroal6@amazon.de', '482-550-5060', 'acroal6', '2022-03-13', 'et commodo',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000008, 'Nanon', 'Apfelmann', '111','napfelmann7@google.co.uk', '861-461-9971', 'napfelmann7', '2022-04-01', 'nulla pede',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000009, 'Malorie', 'Frobisher', '111','mfrobisher8@behance.net', '447-515-8794', 'mfrobisher8', '2022-04-08', 'in ante',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000010, 'Vic', 'Bucktharp', '111','vbucktharp9@pen.io', '622-265-7225', 'vbucktharp9', '2022-04-10', 'non mauris morbi',true);
 
 -------------------------------------------------- insert into chat room
 insert into chat_rooms(id, user1_id, user2_id) values (1000011, 1000010,1000009);
@@ -89,6 +89,7 @@ insert into permissions(id, name, permission_enum) values (1000077, 'DELETE_USER
 insert into permissions(id, name, permission_enum) values (1000078, 'CHANGE_AVATAR', 'CHANGE_AVATAR');
 insert into permissions(id, name, permission_enum) values (1000079, 'CHANGE_NAME', 'CHANGE_NAME');
 insert into permissions(id, name, permission_enum) values (1000080, 'OWNER', 'OWNER');
+insert into permissions(id, name, permission_enum) values (1000081, 'BLOCKED', 'BLOCKED');
 
 
 

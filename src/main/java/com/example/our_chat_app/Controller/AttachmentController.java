@@ -29,6 +29,7 @@ public class AttachmentController {
     AttachmentRepository attachmentRepo;
     @Autowired
     AttachmentService attachmentService;
+    String filePath = "./src/main/resources";
     @GetMapping("/{id}")
     public ResponseEntity<ByteArrayResource> getAttachment(@PathVariable Long id){
         Attachment attachment = attachmentRepo.findById(id).orElse(null);
