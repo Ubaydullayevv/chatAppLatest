@@ -2,11 +2,13 @@ package com.example.our_chat_app.Controller;
 
 
 import com.example.our_chat_app.dto.UserDto;
+import com.example.our_chat_app.entity.User;
 import com.example.our_chat_app.security.JWTProvider;
 import com.example.our_chat_app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +36,9 @@ public class AuthController {
 
 
     }
-    @GetMapping("home/{userId}")
-    public  ResponseEntity<?> homePage(@PathVariable Long userId){
+    @GetMapping("home")
+    public  ResponseEntity<?> homePage(Authentication authentication){
+        Long userId = ((User) authentication.getPrincipal()).getId();
         return userService.getHomePage(userId);
     }
 
