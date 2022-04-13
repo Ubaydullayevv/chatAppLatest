@@ -53,8 +53,6 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
                     "where g.id = :groupId\n" +
                     "order by gm.created_at desc")
     List<Map<String,Object>> getAllMessage();
-    @Query(nativeQuery = true,
-            value = "insert into groups_users (group_id, user_id) values (:groupId,:userId)")
-    Optional<?> addMember(Long groupId, Long userId);
+
 
 }

@@ -2,6 +2,7 @@ package com.example.our_chat_app.Controller;
 
 import com.example.our_chat_app.dto.GroupDto;
 import com.example.our_chat_app.dto.GroupMessageDto;
+import com.example.our_chat_app.dto.PermissionDto;
 import com.example.our_chat_app.entity.User;
 import com.example.our_chat_app.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,5 +58,9 @@ public class GroupController {
     @GetMapping("delete/{messageId}")
         public ResponseEntity<?> deleteMessage(@PathVariable Long messageId){
       return   groupService.deleteMessage(messageId);
+    }
+    @PostMapping("/givePermission")
+    public  ResponseEntity<?> givePermission(@RequestBody PermissionDto permissionDto){
+        return groupService.givePermission(permissionDto);
     }
 }
