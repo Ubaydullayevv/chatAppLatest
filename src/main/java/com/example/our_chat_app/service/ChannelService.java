@@ -33,12 +33,12 @@ public class ChannelService {
     GroupMessageRepository groupMessageRepository;
 
 
-    public List<ChannelProjection> getAllChannels() {
-        return channelRepository.getAllChannels();
+    public List<?> getAllChannels(Long userId) {
+        return channelRepository.getAllChannels(userId);
     }
 
-    public List<PostProjection> getAllPosts() {
-        return channelRepository.getAllPosts();
+    public List<?> getAllPosts(Long channelId) {
+        return channelRepository.getAllPosts(channelId);
     }
 
 
@@ -66,5 +66,12 @@ public class ChannelService {
         ApiResponse response = new ApiResponse("success", true, message);
         return ResponseEntity.ok(response);
 
+    }
+
+
+    public HttpEntity<?> deletePost(Long postId) {
+        channelRepository.deleteById(postId);
+        ApiResponse response = new ApiResponse("Successfully deleted!", true);
+        return ResponseEntity.ok(response);
     }
 }

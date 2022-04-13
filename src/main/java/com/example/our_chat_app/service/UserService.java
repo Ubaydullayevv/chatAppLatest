@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.sql.Timestamp;
 import java.time.Duration;
@@ -95,5 +96,34 @@ public class UserService implements UserDetailsService {
         if (userOptional.isPresent()) {
             return userOptional.get();
         }else throw new UsernameNotFoundException("user not found");
+    }
+
+    public ResponseEntity<?> getHomePage(Long userId) {
+        String groups = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/showAllGroups/")
+                .path(userId.toString())
+                .toUriString();
+        String chats = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/chats/chats/")
+                .path(userId.toString())
+                .toUriString();
+        String unreadMessage = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/unread/")
+                .toUriString();
+        String allMessage = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/chats/")
+                .path(userId.toString())
+                .toUriString();
+        String profile = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/profile/")
+                .toUriString();
+        Map<String,String> maps=new HashMap<>();
+        maps.put("Groups",groups);
+        maps.put("Chats",chats);
+        maps.put("Unread Messages",unreadMessage);
+        maps.put("All messages",allMessage);
+        maps.put("Profile",profile);
+        return ResponseEntity.ok(maps);
+
     }
 }

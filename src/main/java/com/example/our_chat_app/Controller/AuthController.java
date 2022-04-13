@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -35,6 +33,10 @@ public class AuthController {
         return ResponseEntity.ok(generatedToken);
 
 
+    }
+    @GetMapping("home/{userId}")
+    public  ResponseEntity<?> homePage(@PathVariable Long userId){
+        return userService.getHomePage(userId);
     }
 
 //    @PostMapping("/register")

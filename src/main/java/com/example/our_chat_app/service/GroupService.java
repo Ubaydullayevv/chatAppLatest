@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -127,8 +128,14 @@ public class GroupService {
     }
 
     public ResponseEntity<?> showAllGroups(Long userId) {
-         groupRepository.showAllGroups(userId);
-         return null;
+        ApiResponse apiResponse=new ApiResponse();
+        List<Map<String, Object>> maps = groupRepository.showAllGroups(userId);
+        apiResponse.setData(maps);
+        apiResponse.setSuccess(true);
+        if (maps.isEmpty()) {
+            apiResponse.setMessage("You dont have any groups");
+        }
+        return ResponseEntity.ok(maps);
     }
 
 }
