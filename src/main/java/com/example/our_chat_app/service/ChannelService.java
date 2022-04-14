@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ChannelService {
@@ -39,6 +40,7 @@ public class ChannelService {
     }
 
     public Page<?> getAllPosts(Long channelId, int page, int size) {
+        channelRepository.addCountAmount(channelId, page,size);
         return channelRepository.getAllPosts(channelId, PageRequest.of(page, size));
     }
 
