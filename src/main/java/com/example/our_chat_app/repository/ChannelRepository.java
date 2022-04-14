@@ -6,8 +6,10 @@ import com.example.our_chat_app.projection.PostProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.List;
@@ -21,7 +23,7 @@ public interface ChannelRepository extends JpaRepository<Group, Long> {
             "       g.name,\n" +
             "       (select text from group_message where group_message.group_id = g.id order by created_at desc limit 1),\n" +
             "       max(gm.created_at) as data,\n" +
-            "       g.group_avatar_id\n" +
+            "       g.group_avatar_id as \"channel_avatar\"\n" +
             "from groups g\n" +
             "         join groups_users gu on g.id = gu.group_id\n" +
             "         join group_message gm on g.id = gm.group_id\n" +
@@ -39,7 +41,6 @@ public interface ChannelRepository extends JpaRepository<Group, Long> {
             "       gm.view_count,\n" +
             "       gm.updated_at,\n" +
             "        (case when updated_at isnull then false else true end ) as \"isEdited\"\n" +
-            "\n" +
             "from group_message gm\n" +
             "         join groups g on g.id = gm.group_id\n" +
             "         join users u on u.id = gm.from_id\n" +
@@ -48,8 +49,13 @@ public interface ChannelRepository extends JpaRepository<Group, Long> {
     Page<Map<String,Object>> getAllPosts(Long channelId, Pageable pageable);
 
 
-
-
-
-
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "update group_message\n" +
+            "set view_count = (1 + group_message.view_count)\n" +
+            "where id in (select id\n" +
+            "             from group_message\n" +
+            "             where group_id = :channelId\n" +
+            "             limit :size offset :size * :page)\n")
+    void addCountAmount(Long channelId, int page, int size);
 }

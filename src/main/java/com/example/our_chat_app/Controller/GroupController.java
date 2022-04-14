@@ -45,7 +45,7 @@ public class GroupController {
         Long userId = ((User) authentication.getPrincipal()).getId();
         return groupService.showAllGroups(userId);
     }
-    @PreAuthorize("hasAuthority('MEMBER')")
+//    @PreAuthorize("hasAuthority('MEMBER')")
     @GetMapping("/showAllMessages/{groupId}")
     public ResponseEntity<?> showAllMessages(@PathVariable Long groupId, @RequestParam(required = false, defaultValue = "5") int size,
                                              @RequestParam(required = false, defaultValue = "1") int page) {
@@ -60,9 +60,10 @@ public class GroupController {
         return groupService.addMember(groupId,userId);
     }
     @GetMapping("delete/{messageId}")
-    @PreAuthorize("hasAuthority('MEMEBER')")
-        public ResponseEntity<?> deleteMessage(@PathVariable Long messageId){
-      return   groupService.deleteMessage(messageId);
+        public ResponseEntity<?> deleteMessage(@PathVariable Long messageId,Authentication authentication){
+        Long userId = ((User) authentication.getPrincipal()).getId();
+
+        return   groupService.deleteMessage(messageId,userId);
     }
     @PostMapping("/givePermission")
     @PreAuthorize("@userService.getAuthority(principal.username, #permissionDto.groupId, 'OWNER')")

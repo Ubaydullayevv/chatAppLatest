@@ -102,22 +102,19 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<?> getHomePage(Long userId) {
         String groups = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/showAllGroups/")
-                .path(userId.toString())
+                .path("/api/group/showAllGroups/")
                 .toUriString();
         String chats = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/chats/chats/")
-                .path(userId.toString())
+                .path("/api/chat/chats/")
                 .toUriString();
         String unreadMessage = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/unread/")
+                .path("/api/chat/unread/")
                 .toUriString();
         String allMessage = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/chats/")
-                .path(userId.toString())
+                .path("/api/chat")
                 .toUriString();
         String profile = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/profile/")
+                .path("/api/user/edit")
                 .toUriString();
         Map<String, String> maps = new HashMap<>();
         maps.put("Groups", groups);
