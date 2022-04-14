@@ -48,6 +48,10 @@ public class GroupController {
         Long userId = 1000009L;
         return groupService.showAllGroups(userId);
     }
+    @GetMapping("/showAllMessages/{groupId}")
+    public ResponseEntity<?> showAllMessages(@PathVariable Long groupId) {
+        return groupService.showAllMessages(groupId);
+    }
 
     @PostMapping("/addMember")
     public ResponseEntity<?> addMember(
