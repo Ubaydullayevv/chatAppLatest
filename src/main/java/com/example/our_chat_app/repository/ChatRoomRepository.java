@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -21,11 +22,10 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             "        from chat_rooms\n" +
             "                 join chat_messages c on chat_rooms.id = c.chat_room_id\n" +
             "        where (chat_rooms.user2_id in (:from, :to) and chat_rooms.user1_id in (:from, :to))) as \"elementCount\",\n" +
-            "       cast(json_agg(json_build_object('date', date, 'messages', messages)) as text)         as \"messages\",\n" +
-            "       user2_id\n" +
+            "       cast(json_agg(json_build_object('date', date, 'messages', messages)) as text)         as \"messages\"\n" +
             "from (select date,\n" +
             "             json_agg(json_build_object('msgId', inn.msgId, 'msgBody', msgBody, 'msgFromId', msgFromId, 'writtenTime',\n" +
-            "                                        inn.writtinTime)) as messages,\n" +
+            "                                        inn.writtinTime, 'isRead', inn.isRead)) as messages,\n" +
             "             user1_id,\n" +
             "             user2_id,\n" +
             "             inn.roomId\n" +
@@ -36,7 +36,8 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             "                   cast(cm.created_at as time) as writtinTime,\n" +
             "                   cast(cm.created_at as date) as date,\n" +
             "                   cm.text                     as msgBody,\n" +
-            "                   cm.from_id                  as msgFromId\n" +
+            "                   cm.from_id                  as msgFromId,\n" +
+            "                   is_read as isRead" +
             "            from chat_rooms\n" +
             "                     join chat_messages cm on chat_rooms.id = cm.chat_room_id\n" +
             "            where (chat_rooms.user2_id in (:from, :to) and chat_rooms.user1_id in (:from, :to))\n" +
@@ -48,6 +49,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             "group by user1_id, user2_id, sub_in.roomId", nativeQuery = true)
     Map<String, Object> findAllMessagesPage(Long to, Long from, int size, int page);
 
+    @Transactional
     @Modifying
     @Query(nativeQuery = true,
             value = "update chat_messages\n" +

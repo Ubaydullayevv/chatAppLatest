@@ -11,16 +11,14 @@ import java.util.Date;
 public class JWTProvider {
 
     long expirationTime = 1000 * 3600000L;
-    String secretKey = "group3";
+    String secretKey = "group2";
 
     public String generateToken(String username) {
         String token = Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
-/*
                 .signWith(SignatureAlgorithm.HS512, secretKey)
-*/
                 .compact();
         return token;
     }
