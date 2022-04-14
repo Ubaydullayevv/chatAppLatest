@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +30,8 @@ public class ChannelController {
 
 
     @GetMapping
-    public HttpEntity<?> getAllChannels() {
-
-        Long userId=1000001L;
+    public HttpEntity<?> getAllChannels(Authentication authentication) {
+        Long userId=((User) authentication.getPrincipal()).getId();
         List<?> allChannels = channelService.getAllChannels(userId);
         ApiResponse response = new ApiResponse("success", true, allChannels);
         return ResponseEntity.ok(response);
@@ -50,7 +50,6 @@ public class ChannelController {
 
 
     @PostMapping("/create")
-
     public HttpEntity<?> createChannel(@Valid @RequestBody ChannelDto channelDto, Authentication authentication) {
         Long userid = ((User) authentication.getPrincipal()).getId();
         return channelService.createChannel(userid,channelDto);
@@ -59,8 +58,9 @@ public class ChannelController {
 
 
     @PostMapping("/writePost")
-    public HttpEntity<?> writePost(@Valid @RequestBody GroupMessageDto groupMessageDto) {
-        Long userid = 1000009L;
+    @PreAuthorize("@userService.getAuthority(principal.username, #groupMessageDto.groupId,'OWNER') and @userService.noAuthority(principal.username,#groupMessageDto.groupId,'BLOCKED')")
+    public HttpEntity<?> writePost(@Valid @RequestBody GroupMessageDto groupMessageDto, Authentication authentication) {
+        Long userid = ((User) authentication.getPrincipal()).getId();
         return channelService.writePost(userid, groupMessageDto);
     }
 
@@ -68,6 +68,7 @@ public class ChannelController {
     // TODO: 4/13/2022 postni o'chirish uchun kanalni admini bo'lish kerak
 
     @DeleteMapping("/deletePost/{postId}")
+    @PreAuthorize("@userService.checkDeletePost(principal.username, #postId,'OWNER')")
     public HttpEntity<?> deletePost(@PathVariable Long postId) {
         return channelService.deletePost(postId);
     }
