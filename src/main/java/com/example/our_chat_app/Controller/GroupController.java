@@ -48,8 +48,9 @@ public class GroupController {
     }
     @PreAuthorize("hasAuthority('MEMBER')")
     @GetMapping("/showAllMessages/{groupId}")
-    public ResponseEntity<?> showAllMessages(@PathVariable Long groupId) {
-        return groupService.showAllMessages(groupId);
+    public ResponseEntity<?> showAllMessages(@PathVariable Long groupId, @RequestParam(required = false, defaultValue = "5") int size,
+                                             @RequestParam(required = false, defaultValue = "1") int page) {
+        return groupService.showAllMessages(groupId,page-1,size);
     }
 
     @PostMapping("/addMember")
