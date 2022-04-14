@@ -52,7 +52,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
                     "         join users u on u.id = gm.from_id\n" +
                     "where g.id = :groupId\n" +
                     "order by gm.created_at desc")
-    List<Map<String,Object>> getAllMessage();
+    List<Map<String,Object>> getAllMessage(Long groupId);
 
 
 }

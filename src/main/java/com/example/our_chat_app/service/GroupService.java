@@ -186,4 +186,10 @@ public class GroupService {
         }
         return ResponseEntity.ok(msg);
     }
+
+    public ResponseEntity<?> showAllMessages(Long groupId) {
+        List<Map<String, Object>> allMessage = groupRepository.getAllMessage(groupId);
+        
+        return ResponseEntity.ok(allMessage);
+    }
 }
