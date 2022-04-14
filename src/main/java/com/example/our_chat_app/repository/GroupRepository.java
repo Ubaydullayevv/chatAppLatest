@@ -40,6 +40,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
             value = "select gm.id as id,\n" +
                     "       gm.text,\n" +
                     "       concat(u.firstname, '', u.lastname) as authorName,\n" +
+                    "       gm.view_count,\n" +
                     "       (case when view_count < 2 then false else true end ) as \"isRead\",\n" +
                     "       gm.created_at,\n" +
                     "       gm.updated_at,\n" +

@@ -29,6 +29,7 @@ public class GroupController {
     }
 
     @PostMapping("/send")
+    @PreAuthorize("@userService.noAuthority(principal.username,#messageDto.groupId,'BLOCKED')")
     public HttpEntity<?> sendMessage(@Valid @RequestBody GroupMessageDto messageDto) {
         Long from = 1000009L;
         return groupService.sendMessage(messageDto, from);
@@ -45,6 +46,7 @@ public class GroupController {
         Long userId = 1000009L;
         return groupService.showAllGroups(userId);
     }
+    @PreAuthorize("hasAuthority('MEMBER')")
     @GetMapping("/showAllMessages/{groupId}")
     public ResponseEntity<?> showAllMessages(@PathVariable Long groupId, @RequestParam(required = false, defaultValue = "5") int size,
                                              @RequestParam(required = false, defaultValue = "1") int page) {
@@ -52,6 +54,7 @@ public class GroupController {
     }
 
     @PostMapping("/addMember")
+    @PreAuthorize("@userService.getAuthority(principal.username, #groupId ,'OWNER')")
     public ResponseEntity<?> addMember(
             @RequestParam Long groupId,
             @RequestParam Long userId) {

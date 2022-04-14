@@ -151,4 +151,30 @@ public class UserService implements UserDetailsService {
         }
         return ResponseEntity.ok(response);
     }
+
+    public boolean getAuthority(String username,Long groupId, String ...permission) {
+        List<String> authority = userRepository.getAuthority(username, groupId);
+        for (String s : authority) {
+            for (String s1 : permission) {
+                if (s.equals(s1)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean noAuthority(String username,Long groupId, String ...permission ) {
+        List<String> authority = userRepository.getAuthority(username, groupId);
+        boolean check = false;
+        for (String s : authority) {
+            for (String s1 : permission) {
+                check = s1.equals(s);
+                if (check) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
