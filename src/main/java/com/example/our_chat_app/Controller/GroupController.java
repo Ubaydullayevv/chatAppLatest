@@ -8,6 +8,7 @@ import com.example.our_chat_app.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,12 +34,8 @@ public class GroupController {
         return groupService.sendMessage(messageDto, from);
     }
 
-    @GetMapping("/showAllGroups/{userId}")
-    public ResponseEntity<?> showAllGroups(@PathVariable Long userId) {
-        return groupService.showAllGroups(userId);
-    }
-
     @PutMapping("/edit")
+//    @PreAuthorize("")
     public HttpEntity<?> editGroupMessage(@RequestBody GroupMessageDto groupMessageDto, Authentication authentication){
         Long id = ((User) authentication.getPrincipal()).getId();
         return groupService.edit(groupMessageDto,id);
