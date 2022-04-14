@@ -177,4 +177,16 @@ public class UserService implements UserDetailsService {
         }
         return true;
     }
+
+    public boolean checkDeletePost(String username, Long postId, String ...permissions) {
+        List<String> authorityByPostId = userRepository.getAuthorityByPostId(postId, username);
+        for (String s : authorityByPostId) {
+            for (String permission : permissions) {
+                if (s.equals(permission)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

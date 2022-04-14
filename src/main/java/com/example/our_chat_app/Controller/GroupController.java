@@ -23,27 +23,26 @@ public class GroupController {
     GroupService groupService;
 
     @PostMapping(consumes = {"multipart/form-data"})
-    public HttpEntity<?> createGroup(@Valid @RequestPart GroupDto groupDto, @RequestPart(required = false) MultipartFile avatar) {
-        Long from = 1000009L;
+    public HttpEntity<?> createGroup(@Valid @RequestPart GroupDto groupDto, @RequestPart(required = false) MultipartFile avatar, Authentication authentication) {
+        Long from = ((User) authentication.getPrincipal()).getId();
         return groupService.createGroup(groupDto, avatar, from);
     }
 
     @PostMapping("/send")
     @PreAuthorize("@userService.noAuthority(principal.username,#messageDto.groupId,'BLOCKED')")
-    public HttpEntity<?> sendMessage(@Valid @RequestBody GroupMessageDto messageDto) {
-        Long from = 1000009L;
+    public HttpEntity<?> sendMessage(@Valid @RequestBody GroupMessageDto messageDto,  Authentication authentication) {
+        Long from = ((User) authentication.getPrincipal()).getId();
         return groupService.sendMessage(messageDto, from);
     }
 
     @PutMapping("/edit")
-//    @PreAuthorize("")
     public HttpEntity<?> editGroupMessage(@RequestBody GroupMessageDto groupMessageDto, Authentication authentication){
         Long id = ((User) authentication.getPrincipal()).getId();
         return groupService.edit(groupMessageDto,id);
     }
     @GetMapping("/showAllGroups")
-    public ResponseEntity<?> showAllGroups() {
-        Long userId = 1000009L;
+    public ResponseEntity<?> showAllGroups(Authentication authentication) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
         return groupService.showAllGroups(userId);
     }
     @PreAuthorize("hasAuthority('MEMBER')")
@@ -61,10 +60,12 @@ public class GroupController {
         return groupService.addMember(groupId,userId);
     }
     @GetMapping("delete/{messageId}")
+    @PreAuthorize("hasAuthority('MEMEBER')")
         public ResponseEntity<?> deleteMessage(@PathVariable Long messageId){
       return   groupService.deleteMessage(messageId);
     }
     @PostMapping("/givePermission")
+    @PreAuthorize("@userService.getAuthority(principal.username, #permissionDto.groupId, 'OWNER')")
     public  ResponseEntity<?> givePermission(@RequestBody PermissionDto permissionDto){
         return groupService.givePermission(permissionDto);
     }
