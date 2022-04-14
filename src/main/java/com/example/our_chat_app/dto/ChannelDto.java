@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,14 +14,13 @@ public class ChannelDto {
 
     private String channelName;
 
-    @Column(nullable = false, unique = true)
     private String channelUsername;
 
     private Boolean isPrivate;
 
     private Long avatarId;
 
-    private Long ownerId;
+    List<Long> users = new ArrayList<>();
 
 
 
