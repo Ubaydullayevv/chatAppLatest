@@ -42,7 +42,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
                     "       gm.text,\n" +
                     "       concat(u.firstname, '', u.lastname) as authorName,\n" +
                     "       gm.view_count,\n" +
-                    "       (case when view_count isnull then false else true end ) as \"isRead\",\n" +
+                    "       (case when view_count < 2 then false else true end ) as \"isRead\",\n" +
                     "       gm.created_at,\n" +
                     "       gm.updated_at,\n" +
                     "        (case when updated_at isnull then false else true end ) as \"isEdited\"\n" +
