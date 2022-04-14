@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 public class GroupMessageDto {
     Long id;
     @NotNull(message = "you must select a group")
-    Long groupId ;
+    Long groupId;
     @NotEmpty(message = "the message must not be empty")
     @NotBlank(message = "the message must consist of characters")
     @NotNull(message = "you must input your message")
