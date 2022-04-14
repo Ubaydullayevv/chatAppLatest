@@ -8,6 +8,8 @@ import com.example.our_chat_app.entity.enums.PermissionEnum;
 import com.example.our_chat_app.payload.ApiResponse;
 import com.example.our_chat_app.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -187,9 +189,14 @@ public class GroupService {
         return ResponseEntity.ok(msg);
     }
 
-    public ResponseEntity<?> showAllMessages(Long groupId) {
-        List<Map<String, Object>> allMessage = groupRepository.getAllMessage(groupId);
-        
+    public ResponseEntity<?> showAllMessages(Long groupId, int page, int size) {
+        Page<Map<String, Object>> allMessage = groupRepository.getAllMessage(groupId, PageRequest.of(page, size));
+        for (Map<String, Object> stringObjectMap : allMessage) {
+            Object id = stringObjectMap.get("id");
+            Optional<GroupMessage> byId = messageRepository.findById(Long.valueOf(id.toString()));
+            byId.get().setViewCount(2);
+            messageRepository.save(byId.get());
+        }
         return ResponseEntity.ok(allMessage);
     }
 }

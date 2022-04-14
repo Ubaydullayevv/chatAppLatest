@@ -1,15 +1,14 @@
 package com.example.our_chat_app.repository;
 
 import com.example.our_chat_app.entity.Group;
-import com.example.our_chat_app.projection.PostProjection;
-import com.example.our_chat_app.projetion.GroupProjection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
@@ -38,11 +37,10 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     )
     List<Map<String, Object>> showAllGroups(Long userId);
     @Query(nativeQuery = true,
-            value = "select gm.id,\n" +
+            value = "select gm.id as id,\n" +
                     "       gm.text,\n" +
                     "       concat(u.firstname, '', u.lastname) as authorName,\n" +
-                    "       gm.view_count,\n" +
-                    "       (case when view_count isnull then false else true end ) as \"isRead\",\n" +
+                    "       (case when view_count < 2 then false else true end ) as \"isRead\",\n" +
                     "       gm.created_at,\n" +
                     "       gm.updated_at,\n" +
                     "        (case when updated_at isnull then false else true end ) as \"isEdited\"\n" +
@@ -52,7 +50,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
                     "         join users u on u.id = gm.from_id\n" +
                     "where g.id = :groupId\n" +
                     "order by gm.created_at desc")
-    List<Map<String,Object>> getAllMessage(Long groupId);
+    Page<Map<String,Object>> getAllMessage(Long groupId, Pageable pageable);
 
 
 }
