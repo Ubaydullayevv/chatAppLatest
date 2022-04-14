@@ -1,16 +1,16 @@
 
 ------------------------------------- insert into users
-insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000006, 'Birk', 'Isakowicz', '111','bisakowicz5@google.com.hk', '768-461-7801', 'birk', '2022-03-21', 'faucibus accumsan odio',true);
-insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000007, 'Avery', 'Croal', '111','acroal6@amazon.de', '482-550-5060', 'avery', '2022-03-13', 'et commodo',true);
-insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000008, 'Nanon', 'Apfelmann', '111','napfelmann7@google.co.uk', '861-461-9971', 'nanon', '2022-04-01', 'nulla pede',true);
-insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000009, 'Malorie', 'Frobisher', '111','mfrobisher8@behance.net', '447-515-8794', 'malorie', '2022-04-08', 'in ante',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000006, 'Sardor', 'Ubaydullayev', '111','bisakowicz5@google.com.hk', '768-461-7801', 'sardor', '2022-03-21', 'faucibus accumsan odio',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000007, 'Sadulloh', 'Nazullayev', '111','acroal6@amazon.de', '482-550-5060', 'sadulloh', '2022-03-13', 'et commodo',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000008, 'Nurbek', 'Abduraximov', '111','napfelmann7@google.co.uk', '861-461-9971', 'nurbek', '2022-04-01', 'nulla pede',true);
+insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000009, 'Islom', 'Isoqov', '111','mfrobisher8@behance.net', '447-515-8794', 'islom', '2022-04-08', 'in ante',true);
 insert into users (id, firstname,lastname,password, email, phone_number, username, last_seen, bio,is_registration_completed) values (1000010, 'Vic', 'Bucktharp', '111','vbucktharp9@pen.io', '622-265-7225', 'vic', '2022-04-10', 'non mauris morbi',true);
 
 -------------------------------------------------- insert into chat room
 insert into chat_rooms(id, user1_id, user2_id) values (1000011, 1000010,1000009);
 insert into chat_rooms(id, user1_id, user2_id) values (1000012, 1000008,1000009);
 insert into chat_rooms(id, user1_id, user2_id) values (1000013, 1000007,1000009);
-insert into chat_rooms(id, user1_id, user2_id) values (1000014, 1000008,1000009);
+insert into chat_rooms(id, user1_id, user2_id) values (1000014, 1000008,1000006);
 
 
 --------------------------------------- inset into
@@ -64,16 +64,16 @@ insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, fro
 insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000062, '2021-10-21',false,null,1000013,1000009, 'orci eget orci vehicula', '2021-09-27');
 insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000063, '2021-12-12',false,null,1000013,1000009, 'volutpat dui maecenas tristique', '2021-12-06');
 insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000064, '2021-12-02',false,null,1000013,1000009, 'mauris laoreet ut', '2021-11-24');
-insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000065, '2022-02-25',false,null,1000013,1000009, 'mollis molestie', '2021-10-05');
-insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000066, '2021-09-13',false,null,1000013,1000009, 'quis orci eget', '2021-07-27');
-insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000067, '2021-12-09',false,null,1000013,1000009, 'nulla ut erat id', '2022-01-04');
-insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000068, '2022-02-03',false,null,1000013,1000009, 'in felis eu', '2021-05-06');
-insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000069, '2022-02-12',false,null,1000013,1000009, 'nisi venenatis', '2021-07-23');
-insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000070, '2022-02-07',false,null,1000013,1000009, 'erat vestibulum sed', '2022-01-27');
-insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000071, '2021-12-06',false,null,1000013,1000009, 'lorem integer', '2021-09-29');
-insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000072, '2021-08-30',false,null,1000013,1000009, 'posuere metus', '2021-04-20');
-insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000073, '2022-02-03',false,null,1000013,1000009, 'tortor eu', '2021-05-27');
-insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000074, '2022-02-03',false,null,1000013,1000009, 'mattis odio', '2022-01-29');
+insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000065, '2022-02-25',false,null,1000014,1000008, 'mollis molestie', '2021-10-05');
+insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000066, '2021-09-13',false,null,1000014,1000008, 'quis orci eget', '2021-07-27');
+insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000067, '2021-12-09',false,null,1000014,1000008, 'nulla ut erat id', '2022-01-04');
+insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000068, '2022-02-03',false,null,1000014,1000008, 'in felis eu', '2021-05-06');
+insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000069, '2022-02-12',false,null,1000014,1000008, 'nisi venenatis', '2021-07-23');
+insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000070, '2022-02-07',false,null,1000014,1000008, 'erat vestibulum sed', '2022-01-27');
+insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000071, '2021-12-06',false,null,1000014,1000006, 'lorem integer', '2021-09-29');
+insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000072, '2021-08-30',false,null,1000014,1000006, 'posuere metus', '2021-04-20');
+insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000073, '2022-02-03',false,null,1000014,1000006, 'tortor eu', '2021-05-27');
+insert into chat_messages (id, created_at,is_read,delete_from, chat_room_id, from_id, text, updated_at) values (1000074, '2022-02-03',false,null,1000014,1000006, 'mattis odio', '2022-01-29');
 
 
 
@@ -85,6 +85,119 @@ insert into permissions(id, name, permission_enum) values (1000078, 'CHANGE_AVAT
 insert into permissions(id, name, permission_enum) values (1000079, 'CHANGE_NAME', 'CHANGE_NAME');
 insert into permissions(id, name, permission_enum) values (1000080, 'OWNER', 'OWNER');
 insert into permissions(id, name, permission_enum) values (1000081, 'BLOCKED', 'BLOCKED');
+
+
+
+
+insert into groups (id,is_channel,is_private, created_at,created_by_id, username, name, bio) values (1000082,false,false, '2021-12-21',1000010, 'migration', 'Fire Protection', 'purus eu magna');
+insert into groups (id,is_channel,is_private, created_at,created_by_id, username, name, bio) values (1000083,false,false, '2021-06-14',1000008, 'incremental', 'Fire Protection', 'scelerisque mauris sit');
+insert into groups (id,is_channel,is_private, created_at,created_by_id, username, name, bio) values (1000084,false,false, '2022-02-26',1000007, 'Intuitive', 'Roofing (Metal)', 'mi pede malesuada in imperdiet');
+insert into groups (id,is_channel,is_private, created_at,created_by_id, username, name, bio) values (1000085,false,false, '2021-11-29',1000006, 'support', 'Masonry', 'dapibus augue vel accumsan');
+insert into groups (id,is_channel,is_private, created_at,created_by_id, username, name, bio) values (1000086,false,false, '2022-04-04',1000009, 'throughput', 'Asphalt Paving', 'hac habitasse');
+insert into groups (id,is_channel,is_private, created_at,created_by_id, username, name, bio) values (1000087,false,false, '2021-05-13',1000010, 'heuristic', 'Doors, Frames & Hardware', 'et');
+insert into groups (id,is_channel,is_private, created_at,created_by_id, username, name, bio) values (1000088,false,false, '2021-08-12',1000006, 'Team-oriented', 'Marlite Panels (FED)', 'rutrum rutrum neque');
+
+
+
+
+insert into groups_users(group_id, user_id) values (1000082,1000006);
+insert into groups_users(group_id, user_id) values (1000083,1000006);
+insert into groups_users(group_id, user_id) values (1000084,1000010);
+insert into groups_users(group_id, user_id) values (1000085,1000007);
+insert into groups_users(group_id, user_id) values (1000086,1000006);
+insert into groups_users(group_id, user_id) values (1000087,1000006);
+insert into groups_users(group_id, user_id) values (1000088,1000006);
+insert into groups_users(group_id, user_id) values (1000082,1000007);
+insert into groups_users(group_id, user_id) values (1000083,1000007);
+insert into groups_users(group_id, user_id) values (1000084,1000009);
+insert into groups_users(group_id, user_id) values (1000085,1000008);
+insert into groups_users(group_id, user_id) values (1000086,1000008);
+insert into groups_users(group_id, user_id) values (1000087,1000008);
+
+insert into groups_users(group_id, user_id) values (1000082,1000010);
+insert into groups_users(group_id, user_id) values (1000083,1000008);
+insert into groups_users(group_id, user_id) values (1000084,1000007);
+insert into groups_users(group_id, user_id) values (1000085,1000006);
+insert into groups_users(group_id, user_id) values (1000086,1000009);
+insert into groups_users(group_id, user_id) values (1000087,1000010);
+insert into groups_users(group_id, user_id) values (1000088,1000006);
+
+
+
+--------------------------------------------- user permission
+
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000089,1000082,1000080,1000010);
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000090,1000083,1000080,1000008);
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000091,1000084,1000080,1000007);
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000092,1000085,1000080,1000006);
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000093,1000086,1000080,1000009);
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000094,1000087,1000080,1000010);
+
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000095,1000082,1000075,1000006);
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000096,1000082,1000075,1000007);
+
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000097,1000083,1000075,1000006);
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000098,1000083,1000075,1000007);
+
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000099,1000084,1000075,1000010);
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000101,1000084,1000075,1000009);
+
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000102,1000085,1000075,1000007);
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000103,1000085,1000075,1000008);
+
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000104,1000086,1000075,1000006);
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000105,1000086,1000075,1000008);
+
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000106,1000087,1000075,1000008);
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000107,1000087,1000075,1000006);
+
+insert into user_permissions(id, group_id, permission_id, admin_id) values (10000108,1000088,1000075,1000008);
+
+
+---------------------------------------------------------------------- group messages
+
+
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000109, '2022-02-01',null,2,1000007,1000082, 'hello');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000110, '2021-09-04',null,2,1000007,1000083, 'who are you');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000111, '2021-08-13',null,2,1000010,1000084, 'you are lost');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000112, '2022-01-09',null,2,1000008,1000085, 'how do you know my name');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000113, '2022-03-25',null,2,1000008,1000086, 'lacinia erat vestibulum sed magna');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000114, '2021-09-10',null,2,1000008,1000087, 'eget orci vehicula condimentum curabitur');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000115, '2021-11-03',null,2,1000008,1000088, 'imperdiet et commodo vulputate justo');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000116, '2022-03-08',null,2,1000010,1000082,'natoque penatibus et magnis dis');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000117, '2021-04-21',null,2,1000008,1000083,'erat fermentum justo nec condimentum');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000118, '2021-11-06',null,2,1000007,1000084,'pellentesque volutpat dui maecenas tristique');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000119, '2021-09-17',null,2,1000006,1000085,'at velit eu est congue');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000120, '2022-03-23',null,2,1000010,1000087,'nullam sit amet turpis elementum');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000121, '2021-09-23',null,2,1000006,1000088,'amet nunc viverra dapibus nulla');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000122, '2022-02-25',null,2,1000010,1000082,'pharetra magna ac consequat metus');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000123, '2021-09-15',null,2,1000008,1000083,'volutpat in congue etiam justo');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000124, '2021-06-22',null,2,1000007,1000084,'quam pharetra magna ac consequat');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000125, '2021-12-05',null,2,1000006,1000085,'mi nulla ac enim in');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000126, '2021-09-27',null,2,1000009,1000086,'donec odio justo sollicitudin ut');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000127, '2021-08-20',null,2,1000010,1000087,'vel pede morbi porttitor lorem');
+insert into group_message(id, created_at, updated_at, view_count, from_id, group_id, text) VALUES (1000128, '2021-08-31',null,2,1000006,1000088,'dapibus augue vel accumsan tellus');
+
+
+
+insert into groups (id,is_channel,is_private,created_by_id, created_at, username, name, bio) values (1000129,true,true,1000007, '2021-10-11', 'Versatile', 'Waterproofing & Caulking', 'vehicula consequat morbi');
+insert into groups (id,is_channel,is_private,created_by_id, created_at, username, name, bio) values (1000130,true,false,1000008, '2021-12-28', 'monitoring', 'Hard Tile & Stone', 'eget massa tempor convallis');
+insert into groups (id,is_channel,is_private,created_by_id, created_at, username, name, bio) values (1000131,true,false,1000009, '2022-03-23', 'foreground', 'Fire Protection', 'leo maecenas');
+
+insert into groups_users(group_id, user_id) values (1000129,1000007);
+insert into groups_users(group_id, user_id) values (1000130,1000008);
+insert into groups_users(group_id, user_id) values (1000131,1000009);
+insert into groups_users(group_id, user_id) values (1000129,1000010);
+insert into groups_users(group_id, user_id) values (1000130,1000009);
+insert into groups_users(group_id, user_id) values (1000131,1000008);
+
+
+insert into user_permissions(id, group_id,admin_id, permission_id) values (1000132,1000129,1000007,1000080);
+insert into user_permissions(id, group_id,admin_id, permission_id) values (1000133,1000130,1000008,1000080);
+insert into user_permissions(id, group_id,admin_id, permission_id) values (1000134,1000131,1000009,1000080);
+insert into user_permissions(id, group_id,admin_id, permission_id) values (1000135,1000129,1000010,1000075);
+insert into user_permissions(id, group_id,admin_id, permission_id) values (1000136,1000130,1000009,1000075);
+insert into user_permissions(id, group_id,admin_id, permission_id) values (1000137,1000131,1000008,1000075);
 
 
 

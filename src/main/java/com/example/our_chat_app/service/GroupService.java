@@ -17,10 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class GroupService {
@@ -159,7 +156,7 @@ UserService userService;
         Long id = byId.get().getGroup().getId();
         boolean b = userService.checkDeletePost(user.getUsername(), messageId, "DELETE_USER_MESSAGE", "OWNER");
         User from = byId.get().getFrom();
-        if (from.getId()==userId || b) {
+        if (Objects.equals(from.getId(), userId) || b) {
             messageRepository.delete(byId.get());
             return ResponseEntity.ok(new ApiResponse("Successfully deleted"));
         }
