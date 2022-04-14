@@ -91,6 +91,8 @@ public class ChannelService {
 
     }
 
+
+
     public HttpEntity<?> writePost(Long userid, GroupMessageDto groupMessageDto) {
         GroupMessage groupMessage = new GroupMessage();
         groupMessage.setText(groupMessageDto.getMessage());
@@ -98,7 +100,7 @@ public class ChannelService {
         groupMessage.setGroup(channelRepository.findById(groupMessageDto.getGroupId()).get());
         groupMessageRepository.save(groupMessage);
 
-        ApiResponse response = new ApiResponse("success", true, null);
+        ApiResponse response = new ApiResponse("success", true, groupMessage.getId());
         return ResponseEntity.ok(response);
 
     }

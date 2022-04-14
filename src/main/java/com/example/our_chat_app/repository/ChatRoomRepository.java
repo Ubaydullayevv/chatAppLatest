@@ -11,10 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
-    @Query(value = "select :page                                                                                 as page,\n" +
-            "       :size                                                                                 as size,\n" +
+    @Query(value = "select :page+1                                                                                 as page,\n" +
+            "       sum(sizemsg)                                                                               as size,\n" +
             "       sub_in.roomId                                                                         as \"chatRoomId\",\n" +
             "       sub_in.user1_id                                                                       as user1Id,\n" +
             "       sub_in.user2_id                                                                       as user2Id,\n" +
@@ -28,7 +29,8 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             "                                        inn.writtinTime, 'isRead', inn.isRead)) as messages,\n" +
             "             user1_id,\n" +
             "             user2_id,\n" +
-            "             inn.roomId\n" +
+            "             inn.roomId,\n" +
+            "             count(msgId) as sizemsg\n" +
             "      from (select user2_id,\n" +
             "                   user1_id,\n" +
             "                   chat_rooms.id               as roomId,\n" +
@@ -37,7 +39,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             "                   cast(cm.created_at as date) as date,\n" +
             "                   cm.text                     as msgBody,\n" +
             "                   cm.from_id                  as msgFromId,\n" +
-            "                   is_read as isRead" +
+            "                   is_read as isRead " +
             "            from chat_rooms\n" +
             "                     join chat_messages cm on chat_rooms.id = cm.chat_room_id\n" +
             "            where (chat_rooms.user2_id in (:from, :to) and chat_rooms.user1_id in (:from, :to))\n" +
@@ -55,16 +57,16 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             value = "update chat_messages\n" +
                     "set is_read = true\n" +
                     "where id in\n" +
-                    "      (select cm.id\n" +
-                    "       from chat_rooms\n" +
-                    "                join chat_messages cm on chat_rooms.id = cm.chat_room_id\n" +
-                    "       where (chat_rooms.user2_id in (:from, :to) and chat_rooms.user1_id in (:from, :to))\n" +
-                    "       order by created_at desc\n" +
-                    "       limit :size offset :size * :page)")
+                    "      (select ids.id from\n" +
+                    "          (select cm.id\n" +
+                    "           from chat_rooms\n" +
+                    "                    join chat_messages cm on chat_rooms.id = cm.chat_room_id\n" +
+                    "           where (chat_rooms.user2_id in (:from, :to) and chat_rooms.user1_id in (:from, :to))\n" +
+                    "           order by created_at desc\n" +
+                    "           limit :size offset :size * :page) as ids\n" +
+                    "              join chat_messages cm on ids.id = cm.id\n" +
+                    "       where cm.from_id <> :from)")
     void checkMessageRead(Long to, Long from, int page, int size);
-
-
-    boolean existsByUser1IdAndUser2Id(Long user1_id, Long user2_id);
 
     Optional<ChatRoom> findByUser1IdAndUser2Id(Long user1_id, Long user2_id);
 
@@ -89,7 +91,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
                     "         join chat_messages cm on cr.id = cm.chat_room_id\n" +
                     "         join users u on cr.user1_id = u.id or cr.user2_id = u.id\n" +
                     "         left join attachments a on u.avatar_id = a.id\n" +
-                    "where u.id = :from and  (select count(distinct m.id)>0 from chat_messages m where m.chat_room_id = cr.id group by cr.id)\n" +
+                    "where u.id = :from and  (select count(distinct m.id)>0 from chat_messages m where m.chat_room_id = cr.id group by cr.id) and cm.from_id != :from and is_read=false\n" +
                     "group by cr.id\n" +
                     "union\n" +
                     "select gr.id                                                  as \"chatId\",\n" +
@@ -104,11 +106,11 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
                     "       max(gm.created_at)                                     as \"lastMessageTime\",\n" +
                     "       a.id                                                   as \"imageId\"\n" +
                     "from groups gr\n" +
-                    "         join group_message gm on gr.id = gm.group_id\n" +
+                    "         join group_message gm on gr.id = gm.group_id and gm.view_count<2\n" +
                     "         join groups_users gu on gr.id = gu.group_id\n" +
                     "         join users u on gm.from_id = u.id\n" +
                     "         left join attachments a on gr.group_avatar_id = a.id\n" +
-                    "where :from in (gu.user_id) and (select count(distinct m.id)>0 from group_message m where m.group_id = gr.id group by gr.id)\n" +
+                    "where :from in (gu.user_id) and (select count(distinct m.id)>0 from group_message m where m.group_id = gr.id group by gr.id) and gm.from_id <> :from\n" +
                     "group by gr.id, a.id\n" +
                     "order by \"lastMessageTime\" desc")
     List<Map<String, Object>> getAllUnreadMsg(Long from);
@@ -160,11 +162,13 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
 
     @Query(nativeQuery = true, value = "select cr.id                                                                                       as \"chatId\",\n" +
+            "       (case when :from <> cr.user1_id then cr.user1_id else cr.user2_id end)                      as toId,\n" +
             "       (select concat(u2.firstname, ' ', u2.lastname)\n" +
             "        from users u2\n" +
             "        where case when cr.user1_id = :from then cr.user2_id = u2.id else cr.user1_id = u2.id end) as \"name\",\n" +
-            "       count(distinct cm.id)                                                                       as \"newMessageCount\",\n" +
-            "       'chatRoom'                                                                                  as \"type\",\n" +
+            "       (select count(m.id)\n" +
+            "        from chat_messages m\n" +
+            "        where m.chat_room_id = cr.id and not m.is_read and m.from_id <> :from)                     as \"newMessageCount\",\n" +
             "       (select cm1.text\n" +
             "        from chat_messages cm1\n" +
             "        where cm1.chat_room_id = cr.id\n" +
@@ -180,12 +184,15 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             "         join users u on cr.user1_id = u.id or cr.user2_id = u.id\n" +
             "         left join attachments a on u.avatar_id = a.id\n" +
             "where u.id = :from\n" +
-            "group by cr.id\n")
+            "group by cr.id")
     List<Map<String, Object>> getAllUserChatsById(Long from);
 
 
-    @Query(nativeQuery = true, value = "select * from chat_messages")
-    void editMessage(MessageDto messageDto);
+    @Query(nativeQuery = true,
+            value = "select (case when user2_id=:userId then user1_id else user2_id end) as \"to\" " +
+                    "from chat_rooms " +
+                    "where id = :chatRoomId and :userId in(user2_id, user1_id)")
+    Long findToIdByChatRoomId(Long chatRoomId, Long userId);
 
 
 //    @Query(nativeQuery = true, value = "")

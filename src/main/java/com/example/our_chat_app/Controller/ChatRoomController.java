@@ -21,15 +21,14 @@ public class ChatRoomController {
     @Autowired
     ChatRoomService chatRoomService;
 
-    @GetMapping("/{to}")
+    @GetMapping("/{chatRomId}")
     public HttpEntity<?> getAllMessages(
             @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "10") int size,
-            @PathVariable Long to,  Authentication authentication){
+            @PathVariable Long chatRomId,  Authentication authentication){
         Long userId= ((User) authentication.getPrincipal()).getId();
-        return chatRoomService.getMessages(to,userId, page,size);
+        return chatRoomService.getMessages(chatRomId,userId, page-1,size);
     }
-
 
     @PutMapping("/edit")
     public HttpEntity<?> editMessage(@RequestBody MessageDto messageDto){

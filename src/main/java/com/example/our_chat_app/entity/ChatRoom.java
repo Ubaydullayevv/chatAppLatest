@@ -22,8 +22,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity
-@Table(name = "chat_rooms")
+@Entity(name = "chat_rooms")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user1_id", "user2_id"}))
+
 public class ChatRoom {
 
     @Id

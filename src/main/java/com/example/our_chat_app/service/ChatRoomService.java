@@ -31,10 +31,11 @@ public class ChatRoomService {
     @Autowired
     UserRepository userRepository;
 
-
-    public HttpEntity<?> getMessages(Long to, Long userId, int page, int size) {
+    public HttpEntity<?> getMessages(Long chatRoomId, Long userId, int page, int size) {
         ApiResponse response = new ApiResponse();
         try {
+            Long to = chatRoomRepository.findToIdByChatRoomId(chatRoomId,userId);
+            if(to == null) to = chatRoomId;
             Map<String, Object> allMessagesPage = chatRoomRepository.findAllMessagesPage(to, userId, size, page);
             Map<String, Object> map = stringToJsonArray(allMessagesPage, "messages");
             response.setMessage("success");

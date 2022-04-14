@@ -59,7 +59,7 @@ public class GroupController {
             @RequestParam Long userId) {
         return groupService.addMember(groupId,userId);
     }
-    @GetMapping("delete/{messageId}")
+    @DeleteMapping("delete/{messageId}")
         public ResponseEntity<?> deleteMessage(@PathVariable Long messageId,Authentication authentication){
         Long userId = ((User) authentication.getPrincipal()).getId();
 
