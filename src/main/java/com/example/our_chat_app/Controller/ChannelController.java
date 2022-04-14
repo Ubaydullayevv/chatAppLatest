@@ -1,15 +1,11 @@
 package com.example.our_chat_app.Controller;
 
-import com.example.our_chat_app.dto.ChannelDto;
-
+import com.example.our_chat_app.dto.GroupDto;
 import com.example.our_chat_app.dto.GroupMessageDto;
-import com.example.our_chat_app.dto.MessageDto;
-
 import com.example.our_chat_app.entity.User;
-
 import com.example.our_chat_app.payload.ApiResponse;
-import com.example.our_chat_app.projection.ChannelProjection;
 import com.example.our_chat_app.service.ChannelService;
+import com.example.our_chat_app.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
@@ -27,6 +23,9 @@ public class ChannelController {
 
     @Autowired
     ChannelService channelService;
+
+    @Autowired
+    GroupService groupService;
 
 
     @GetMapping
@@ -50,9 +49,9 @@ public class ChannelController {
 
 
     @PostMapping("/create")
-    public HttpEntity<?> createChannel(@Valid @RequestBody ChannelDto channelDto, Authentication authentication) {
+    public HttpEntity<?> createChannel(@Valid @RequestBody GroupDto channelDto, Authentication authentication) {
         Long userid = ((User) authentication.getPrincipal()).getId();
-        return channelService.createChannel(userid,channelDto);
+        return groupService.createGroup(channelDto, null, userid);
     }
 
 
@@ -61,7 +60,7 @@ public class ChannelController {
     @PreAuthorize("@userService.getAuthority(principal.username, #groupMessageDto.groupId,'OWNER') and @userService.noAuthority(principal.username,#groupMessageDto.groupId,'BLOCKED')")
     public HttpEntity<?> writePost(@Valid @RequestBody GroupMessageDto groupMessageDto, Authentication authentication) {
         Long userid = ((User) authentication.getPrincipal()).getId();
-        return channelService.writePost(userid, groupMessageDto);
+        return channelService.writePost(userid,groupMessageDto);
     }
 
 
@@ -72,6 +71,17 @@ public class ChannelController {
     public HttpEntity<?> deletePost(@PathVariable Long postId) {
         return channelService.deletePost(postId);
     }
+
+    @PostMapping("/addMember")
+    @PreAuthorize("@userService.getAuthority(principal.username, #groupId ,'OWNER')")
+    public ResponseEntity<?> addMember(
+            @RequestParam Long groupId,
+            @RequestParam Long userId) {
+        return groupService.addMember(groupId,userId);
+    }
+
+
+
 
 
 

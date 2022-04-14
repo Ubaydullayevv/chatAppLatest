@@ -49,11 +49,10 @@ UserService userService;
             Group group = new Group();
             group.setBio(groupDto.getBio());
             group.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            group.setChannel(false);
+            group.setChannel(groupDto.getIsChanel());
             group.setCreatedBy(userRepository.findById(from).get());
             group.setName(groupDto.getName());
             group.setPrivate(groupDto.getIsPrivate());
-            group.setChannel(groupDto.getIsChanel());
             group.setUsername(groupDto.getUsername());
             List<User> users = userRepository.findAllById(groupDto.getUsers());
             users.remove(from);
@@ -151,7 +150,7 @@ UserService userService;
         groupPermissionRepository.save(new GroupsPermissions(null,byPermissionEnum.get(),user, byId.get()));
         byId.get().setUsers(Collections.singletonList(user));
 
-        return ResponseEntity.ok(new ApiResponse("User Successfully added to this group"));
+        return ResponseEntity.ok(new ApiResponse("User Successfully added"));
     }
 
     public ResponseEntity<?> deleteMessage(Long messageId,Long userId) {
