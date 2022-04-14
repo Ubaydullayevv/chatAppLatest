@@ -193,6 +193,7 @@ public class GroupService {
         for (Map<String, Object> stringObjectMap : allMessage) {
             Object id = stringObjectMap.get("id");
             Optional<GroupMessage> byId = messageRepository.findById(Long.valueOf(id.toString()));
+
             byId.get().setViewCount(2);
             messageRepository.save(byId.get());
         }
