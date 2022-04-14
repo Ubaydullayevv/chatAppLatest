@@ -40,7 +40,8 @@ public class GroupService {
 
     @Autowired
     GroupPermissionRepository groupPermissionRepository;
-
+@Autowired
+UserService userService;
 
     public HttpEntity<?> createGroup(GroupDto groupDto, MultipartFile avatar, Long from) {
         ApiResponse response = new ApiResponse();
@@ -124,7 +125,7 @@ public class GroupService {
         if (maps.isEmpty()) {
             apiResponse.setMessage("You dont have any groups");
         }
-        return ResponseEntity.ok(maps);
+        return ResponseEntity.ok(apiResponse);
     }
 
     public HttpEntity<?> edit(GroupMessageDto groupMessageDto, Long userId) {
@@ -153,10 +154,18 @@ public class GroupService {
         return ResponseEntity.ok(new ApiResponse("User Successfully added to this group"));
     }
 
-    public ResponseEntity<ApiResponse> deleteMessage(Long messageId) {
+    public ResponseEntity<?> deleteMessage(Long messageId,Long userId) {
+        User user = userRepository.findById(userId).get();
         Optional<GroupMessage> byId = messageRepository.findById(messageId);
-        messageRepository.delete(byId.get());
-        return ResponseEntity.ok(new ApiResponse("Successfully deleted"));
+        Long id = byId.get().getGroup().getId();
+        boolean b = userService.checkDeletePost(user.getUsername(), messageId, "DELETE_USER_MESSAGE", "OWNER");
+        User from = byId.get().getFrom();
+        if (from.getId()==userId || b) {
+            messageRepository.delete(byId.get());
+            return ResponseEntity.ok(new ApiResponse("Successfully deleted"));
+        }
+        return ResponseEntity.ok("You dont have a permission to delete");
+
     }
 
     public ResponseEntity<?> givePermission(PermissionDto permissionDto) {
